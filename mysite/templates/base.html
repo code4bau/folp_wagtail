@@ -1,0 +1,214 @@
+{% load static wagtailcore_tags wagtailuserbar %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <title>
+        {% block title %}
+        {% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}
+        {% endblock %}
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+     <link rel="shortcut icon" href="../../media/images/logo folp pestaña.png" type="image/x-icon">
+    {# Bootstrap 5 & FontAwesome #}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    {# Google Fonts #}
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto:wght@300;400;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/mysite.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body class="{% block body_class %}{% endblock %}">
+    {% wagtailuserbar %}
+    {% load facultad_tags %} {# Necesitaremos crear este tag para que sea global #}
+    {% get_alertas as alertas %}
+    {% for alerta in alertas %}
+    {% if alerta.mostrar %}
+    <div class="alert {% if alerta.color_urgencia %}alert-danger{% else %}alert-primary{% endif %} mb-0 text-center rounded-0 py-2"
+        role="alert" style="font-size: 0.9rem; font-weight: bold;">
+        <i class="fas fa-exclamation-triangle me-2"></i> {{ alerta.texto }}
+    </div>
+    {% endif %}
+    {% endfor %}
+    <header class="header-unlp shadow-sm">
+        <div class="top-bar py-3" style="background-color: #1c705b;">
+            <div class="container d-flex align-items-center">
+                <a href="/" class="d-flex align-items-center text-decoration-none">
+                    <img src="../../media/images/logo folpunlp blanco.png" alt="UNLP" style="height: 50px;"
+                        class="me-3">
+                </a>
+            </div>
+        </div>
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-white py-0">
+            <div class="container">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav w-100 justify-content-between">
+                        <li class="nav-item"><a class="nav-link" href="/">Inicio</a></li>
+
+                        <li class="nav-item dropdown-hover">
+                            <a class="nav-link" href="#">Institucional</a>
+                            <ul class="dropdown-custom shadow">
+                                <li><a href="#">Principal Institucional</a></li>
+                                <li><a href="#">Autoridades</a></li>
+                                <li><a href="#">Historia</a></li>
+                                <li><a href="#">Hospital Universitario</a></li>
+                                <li><a href="#">Museo</a></li>
+                                <li><a href="#">Identidad Visual</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown-hover">
+                            <a class="nav-link" href="#">Estudiantiles</a>
+                            <ul class="dropdown-custom shadow">
+                                <li><a href="#">Principal Estudiantiles</a></li>
+                                <li><a href="#">Noticias</a></li>
+                                <li><a href="#">Informacion de Asignaturas</a></li>
+                                <li><a href="#">Becas</a></li>
+                                <li><a href="#">Historia Clinica y Material de Descarga</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown-hover">
+                            <a class="nav-link" href="#">Academica</a>
+                            <ul class="dropdown-custom shadow">
+                                <li><a href="#">Principal Academica</a></li>
+                                <li><a href="#">Carrera Odontologia</a></li>
+                                <li><a href="#">Alumnos</a></li>
+                                <li><a href="#">Biblioteca</a></li>
+                                <li><a href="#">Homologacion</a></li>
+                                <li><a href="#">Tecnicaturas Universitarias</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown-hover">
+                            <a class="nav-link" href="#">Investigacion</a>
+                            <ul class="dropdown-custom shadow">
+                                <li><a href="#">Principal Investigacion</a></li>
+                                <li><a href="#">Proyectos</a></li>
+                                <li><a href="#">Revistas Cientificas</a></li>
+                                <li><a href="#">Resolucion del Centro y los Objetivos</a></li>
+                                <li><a href="#">IIES</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown-hover">
+                            <a class="nav-link" href="#">Posgrado</a>
+                            <ul class="dropdown-custom shadow">
+                                <li><a href="#">Principal Posgrado</a></li>
+                                <li><a href="#">Doctorado</a></li>
+                                <li><a href="#">Maestrias</a></li>
+                                <li><a href="#">Especializaciones</a></li>
+                                <li><a href="#">Cursos</a></li>
+                                <li><a href="#">Tramite de Titulo</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown-hover">
+                            <a class="nav-link" href="#">Extension</a>
+                            <ul class="dropdown-custom shadow">
+                                <li><a href="#">Principal Extension</a></li>
+                                <li><a href="#">Programas y Proyectos</a></li>
+                                <li><a href="#">Politicas Sociales</a></li>
+                                <li><a href="#">Voluntariado</a></li>
+                                <li><a href="#">Revista Entornos</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown-hover">
+                            <a class="nav-link" href="#">Prosecretaria de APS</a>
+                            <ul class="dropdown-custom shadow">
+                                <li><a href="#">ADEI</a></li>
+                                <li><a href="#">Expo Universidad</a></li>
+                                <li><a href="#">Jornada de Extension</a></li>
+                                <li><a href="#">Mes de la Extension</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown-hover">
+                            <a class="nav-link" href="#">Gestión</a>
+                            <ul class="dropdown-custom shadow">
+                                <li><a href="#">Principal Gestion</a></li>
+                                <li><a href="#">Decanato</a></li>
+                                <li><a href="#">Obras y Planeamiento</a></li>
+                                <li><a href="#">Acreditacion CONEAU</a></li>
+                                <li><a href="#">Noticias</a></li>
+                                <li><a href="#">Seguridad e Higiene</a></li>
+                                <li><a href="#">Pliego de Compras</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown-hover">
+                            <a class="nav-link" href="#">Secretarias</a>
+                            <ul class="dropdown-custom shadow">
+                                <li><a href="#">Secretaria de Ciencia y Técnica</a></li>
+                                <li><a href="#">Secretaria de Posgrado</a></li>
+                                <li><a href="#">Secretaria de Extension</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="mt-5 pt-5 pb-4 text-white" style="background-color: #000000;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5 class="fw-bold border-bottom border-info pb-2 mb-3">Contacto</h5>
+                    <p class="small mb-1"><i class="fas fa-map-marker-alt me-2 text-info"></i> Calle 1 y 115 - La Plata
+                    </p>
+                    <p class="small mb-1"><i class="fas fa-phone me-2 text-info"></i> (0221) 423-6775</p>
+                    <p class="small"><i class="fas fa-envelope me-2 text-info"></i> prensa@folp.unlp.edu.ar</p>
+                </div>
+                <div class="col-md-4 mb-4 text-center">
+                    <img src="../../media/images/logo folpunlp blanco.png" alt="UNLP"
+                        style="height: 70px; opacity: 0.6;">
+                </div>
+                <div class="col-md-4 mb-4 text-md-end">
+                    <h5 class="fw-bold border-bottom border-info pb-2 mb-3 text-md-end">Seguinos</h5>
+                    <div class="d-flex justify-content-md-end gap-3">
+                        <a href="#" class="text-white fs-4"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-white fs-4"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white fs-4"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr style="opacity: 0.1;">
+            <div class="text-center small opacity-50">
+                &copy; 2026 Facultad de Odontología - UNLP
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Esto fuerza al carrusel a arrancar con un intervalo de 5 segundos
+        const myCarousel = document.querySelector('#carouselFolp')
+        const carousel = new bootstrap.Carousel(myCarousel, {
+            interval: 3000, // 3 segundos
+            touch: true
+        })
+    </script>
+    <script type="text/javascript" src="{% static 'js/mysite.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

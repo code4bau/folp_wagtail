@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+<article class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+                    <li class="breadcrumb-item active">Noticias</li>
+                </ol>
+            </nav>
+
+            <header class="mb-4">
+                <h1 class="display-4 fw-bold" style="color: var(--unlp-blue);">{{ page.title }}</h1>
+                <p class="text-muted">Publicado el {{ page.fecha|date:"d \d\e F, Y" }}</p>
+            </header>
+
+            {% if page.imagen %}
+                {% image page.imagen width-1200 as img %}
+                <img src="{{ img.url }}" class="img-fluid rounded shadow-sm mb-4" alt="{{ page.title }}">
+            {% endif %}
+
+            <div class="lead fw-bold mb-4" style="color: #555; border-left: 4px solid var(--folp-cyan); padding-left: 15px;">
+                {{ page.resumen }}
+            </div>
+
+            <div class="noticia-cuerpo" style="line-height: 1.8; font-size: 1.1rem;">
+                {{ page.cuerpo|richtext }}
+            </div>
+            
+            <hr class="my-5">
+            <a href="/" class="btn btn-outline-primary">← Volver al inicio</a>
+        </div>
+    </div>
+</article>
+{% endblock %}

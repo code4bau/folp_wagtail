@@ -1,0 +1,87 @@
+{% load wagtailimages_tags %}
+
+<div class="container-fluid my-4 px-4">
+    <div class="logo-strip-container">
+        <div class="logo-strip">
+            {% for item in self %}
+            <div class="logo-item">
+                <a href="{{ item.url }}" class="text-decoration-none h-100 d-flex flex-column align-items-center">
+                    <div class="logo-box shadow-sm">
+                        {% image item.imagen_logo max-60x60 as logo_img %}
+                        <img src="{{ logo_img.url }}" alt="{{ item.etiqueta }}">
+                    </div>
+                    <span class="logo-label">{{ item.etiqueta }}</span>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<style>
+    .logo-strip-container {
+        padding: 5px 0;
+        background-color: #fcfcfc; /* Un gris casi blanco para dar contraste */
+    }
+    
+    .logo-strip {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 30px; /* Más espacio entre cada logo */
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding: 10px;
+    }
+
+    .logo-item {
+        flex: 0 0 auto;
+        width: 100px; /* Un poco más angosto para que se vea más estilizado */
+    }
+
+    .logo-box {
+        background: #ffffff;
+        width: 75px; 
+        height: 75px;
+        border-radius: 20px; /* Bordes mucho más redondeados, tipo app de celular */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 12px;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); /* Animación más suave */
+        box-shadow: 0 4px 12px rgba(0,0,0,0.03); /* Sombra casi imperceptible */
+        border: 1px solid #f0f0f0;
+    }
+
+    .logo-box img {
+        max-width: 55%; /* Reducimos el tamaño del logo dentro de la caja para dar más AIRE */
+        max-height: 55%;
+        filter: grayscale(20%); /* Los desaturamos un pelín para que no chillen tanto */
+        transition: all 0.3s ease;
+    }
+
+    .logo-label {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 0.6rem; /* Tipografía más pequeña y elegante */
+        color: #666; /* Gris en lugar de azul fuerte para que no compita visualmente */
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        line-height: 1.3;
+    }
+
+    /* Efectos al pasar el mouse (Hover) */
+    .logo-item:hover .logo-box {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 20px rgba(0,0,0,0.08) !important;
+        border-color: #1c705b;
+    }
+
+    .logo-item:hover .logo-box img {
+        filter: grayscale(0%); /* El color vuelve al 100% al tocarlo */
+        transform: scale(1.1);
+    }
+
+    .logo-item:hover .logo-label {
+        color: #1c705b;
+    }
+</style>

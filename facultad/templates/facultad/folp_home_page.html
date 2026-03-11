@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags static %}
+
+{% block content %}
+<style>
+    /* Estilos de las Noticias */
+    .noticia-card {
+        border: none;
+        border-radius: 12px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background: #fff;
+        overflow: hidden;
+    }
+    .noticia-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.08) !important;
+    }
+    .noticia-img-container {
+        overflow: hidden;
+        position: relative;
+        height: 220px;
+    }
+    .noticia-img-container img {
+        transition: transform 0.5s ease;
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+    }
+    .noticia-card:hover .noticia-img-container img {
+        transform: scale(1.05);
+    }
+    .noticia-body {
+        padding: 1.5rem;
+    }
+    .noticia-date {
+        font-size: 0.75rem;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 600;
+    }
+    .noticia-title {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 1.15rem;
+        color: #005941;
+        line-height: 1.4;
+        margin: 10px 0;
+        font-weight: 700;
+    }
+    .noticia-text {
+        font-size: 0.9rem;
+        color: #666;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        line-height: 1.6;
+    }
+    .btn-leer-mas {
+        color: #005941;
+        font-weight: 700;
+        text-decoration: none;
+        font-size: 0.85rem;
+        border-bottom: 2px solid transparent;
+        transition: all 0.3s;
+    }
+    .btn-leer-mas:hover {
+        border-bottom-color: #005941;
+        letter-spacing: 0.5px;
+    }
+</style>
+
+<main>
+    {# 1. RENDERIZA EL CARRUSEL Y LOS LOGOS (STREAMFIELD) #}
+    {% for block in page.body %}
+        {% include_block block %}
+    {% endfor %}
+
+    {# 2. SECCIÓN DE NOTICIAS "DELICADAS" #}
+    <div class="container my-5">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <h2 class="fw-bold m-0" style="color: #1c705b; border-left: 6px solid #005941; padding-left: 20px;">Actualidad FOLP</h2>
+            <a href="#" class="btn-leer-mas">Ver todas las noticias +</a>
+        </div>
+
+        <div class="row g-4">
+            {% for noticia in noticias %}
+            <div class="col-md-4">
+                <div class="noticia-card shadow-sm h-100">
+                    <div class="noticia-img-container">
+                        {% if noticia.imagen %}
+                            {% image noticia.imagen fill-800x500 as img %}
+                            <img src="{{ img.url }}" alt="{{ noticia.title }}">
+                        {% endif %}
+                    </div>
+                    <div class="noticia-body d-flex flex-column justify-content-between">
+                        <div>
+                            <span class="noticia-date"><i class="far fa-calendar-alt me-1"></i> {{ noticia.fecha|date:"d M Y" }}</span>
+                            <h5 class="noticia-title">{{ noticia.title }}</h5>
+                            <p class="noticia-text">{{ noticia.resumen }}</p>
+                        </div>
+                        <div class="mt-3">
+                            <a href="{% pageurl noticia %}" class="btn-leer-mas text-uppercase">Leer más →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+                <p class="text-center text-muted w-100">No hay noticias publicadas.</p>
+            {% endfor %}
+        </div>
+    </div>
+</main>
+{% endblock %}

@@ -1,0 +1,20 @@
+<div class="container my-5">
+    <h2 class="news-title mb-4">Actualidad FOLP</h2>
+    <div class="row">
+        {% for noticia in noticias %}
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                {% if noticia.imagen %}
+                    {% image noticia.imagen fill-800x450 class="card-img-top" %}
+                {% endif %}
+                <div class="card-body">
+                    <small class="text-muted">{{ noticia.fecha|date:"d/m/Y" }}</small>
+                    <h5 class="card-title mt-2 fw-bold" style="color: #1c705b;">{{ noticia.title }}</h5>
+                    <p class="card-text text-secondary">{{ noticia.resumen }}</p>
+                    <a href="{% pageurl noticia %}" class="btn btn-outline-primary btn-sm">Leer más</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>

@@ -1,0 +1,139 @@
+:root {
+    --unlp-blue: #1c705b;
+    --folp-green: #1c705b; /* Este es el cian/verde característico de la FOLP */
+    --folp-dark-green: #1c705b;
+}
+
+/* Forzamos el color en el navbar y la franja superior */
+.navbar-dark {
+    background-color: var(--unlp-blue) !important;
+    border-bottom: 5px solid var(--folp-green) !important;
+}
+
+/* El botón de HOSPITAL en el menú con el verde destacado */
+.nav-link.text-info {
+    color: var(--folp-green) !important;
+    font-weight: 800 !important;
+}
+
+/* Títulos con el verde de la FOLP */
+.news-section-title, .section-heading {
+    color: var(--folp-green);
+    border-left: 5px solid var(--folp-green);
+    padding-left: 15px;
+}
+
+/* Botones con el color verde */
+.btn-primary, .bg-primary {
+    background-color: var(--folp-green) !important;
+    border-color: var(--folp-green) !important;
+}
+
+.btn-primary:hover {
+    background-color: var(--folp-dark-green) !important;
+}
+
+/* Estilo para los bloques de accesos rápidos */
+.access-card:hover {
+    border-bottom: 4px solid var(--folp-green) !important;
+}
+
+/* Color Verde/Cian oficial de la FOLP */
+:root {
+    --folp-green: #1c705b !important;
+}
+
+/* Cambia la franja debajo del menú */
+.navbar {
+    border-bottom: 5px solid #1c705b !important;
+}
+
+/* Cambia el color del ítem HOSPITAL y cualquier texto informativo */
+.text-info, .nav-link.text-info {
+    color: #1c705b !important;
+}
+
+/* Cambia la barrita lateral del Hero (el recuadro blanco) */
+.border-info, .border-start {
+    border-color: #1c705b !important;
+}
+
+/* Cambia los botones primarios */
+.btn-primary, .btn-info {
+    background-color: #1c705b !important;
+    border-color: #1c705b !important;
+    color: white !important;
+}
+
+/* Iconos de los accesos rápidos */
+.access-card i, .fa-3x {
+    color: #1c705b !important; /* Azul UNLP para el icono */
+}
+
+.access-card:hover {
+    border-bottom: 4px solid #1c705b !important;
+}
+
+/* Reset de links del menú */
+.navbar-light .navbar-nav .nav-link {
+    color: #444;
+    font-weight: 500;
+    font-size: 0.85rem;
+    padding: 15px 10px !important;
+    transition: all 0.2s;
+}
+
+/* Efecto hover en el link principal */
+.nav-item.dropdown-hover:hover > .nav-link {
+    background-color: #005941; /* El verde de la captura */
+    color: white !important;
+}
+
+/* Contenedor del menú desplegable */
+.dropdown-custom {
+    display: none; /* Oculto por defecto */
+    position: absolute;
+    background: white;
+    list-style: none;
+    padding: 10px 0;
+    margin: 0;
+    min-width: 220px;
+    z-index: 1000;
+    border-top: 3px solid #005941;
+}
+
+/* Mostrar al hacer HOVER */
+.dropdown-hover:hover .dropdown-custom {
+    display: block;
+}
+
+/* Estilo de los links de adentro */
+.dropdown-custom li a {
+    display: block;
+    padding: 8px 20px;
+    color: #555;
+    text-decoration: none;
+    font-size: 0.8rem;
+}
+
+.dropdown-custom li a:hover {
+    background-color: #f8f9fa;
+    color: #005941;
+}
+
+.hero-glass-card {
+    /* Blanco con 85% de opacidad */
+    background-color: rgba(240, 255, 255, 0.70) !important; 
+    
+    /* El toque mágico: desenfoca lo que hay detrás (10px es lo ideal) */
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px); /* Para Safari */
+    
+    border-radius: 0 15px 15px 0; /* Suavizamos las esquinas derechas */
+}
+
+/* Si la imagen de atrás es muy clara, oscurecemos un poquito el texto */
+.hero-glass-card h2 {
+    color: #111 !important;
+    text-shadow: 0 1px 2px rgba(255,255,255,0.5);
+}
