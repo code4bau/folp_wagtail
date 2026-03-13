@@ -1,38 +1,125 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load wagtailcore_tags wagtailimages_tags static %}
 
 {% block content %}
-<article class="container my-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="/">Inicio</a></li>
-                    <li class="breadcrumb-item active">Noticias</li>
-                </ol>
-            </nav>
-
-            <header class="mb-4">
-                <h1 class="display-4 fw-bold" style="color: var(--unlp-blue);">{{ page.title }}</h1>
-                <p class="text-muted">Publicado el {{ page.fecha|date:"d \d\e F, Y" }}</p>
-            </header>
-
-            {% if page.imagen %}
-                {% image page.imagen width-1200 as img %}
-                <img src="{{ img.url }}" class="img-fluid rounded shadow-sm mb-4" alt="{{ page.title }}">
-            {% endif %}
-
-            <div class="lead fw-bold mb-4" style="color: #555; border-left: 4px solid var(--folp-cyan); padding-left: 15px;">
-                {{ page.resumen }}
+<article class="noticia-detalle">
+    {# 1. CABECERA: Imagen a pantalla completa o gran tamaño #}
+    {% if self.imagen %}
+    <div class="noticia-hero">
+        {% image self.imagen fill-1600x600 as header_img %}
+        <div class="hero-img" style="background-image: url('{{ header_img.url }}');">
+            <div class="hero-overlay">
+                <div class="container h-100 d-flex align-items-end pb-5">
+                    <div class="header-text-box p-4 rounded-3 glass-header">
+                        <span class="badge mb-2" style="background-color: #005941;">ACTUALIDAD</span>
+                        <h1 class="display-4 fw-bold text-white mb-0">{{ self.title }}</h1>
+                    </div>
+                </div>
             </div>
+        </div>
+    </div>
+    {% endif %}
 
-            <div class="noticia-cuerpo" style="line-height: 1.8; font-size: 1.1rem;">
-                {{ page.cuerpo|richtext }}
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                {# 2. METADATOS: Fecha y autor #}
+                <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
+                    <div class="date-badge me-3">
+                        <span class="d-block fw-bold text-primary h4 mb-0">{{ self.fecha|date:"d" }}</span>
+                        <span class="text-uppercase small text-muted">{{ self.fecha|date:"M" }}</span>
+                    </div>
+                    <div class="info-meta">
+                        <p class="mb-0 fw-bold" style="color: #005941;">Facultad de Odontología - UNLP</p>
+                        <p class="mb-0 text-muted small">Publicado en Sección Noticias</p>
+                    </div>
+                </div>
+
+                {# 3. RESUMEN: Un texto introductorio destacado #}
+                <p class="lead fw-bold mb-5" style="color: #444; border-left: 4px solid #005941; padding-left: 20px;">
+                    {{ self.resumen }}
+                </p>
+
+                {# 4. CUERPO: El contenido principal #}
+                <div class="noticia-cuerpo" style="font-size: 1.1rem; line-height: 1.8; color: #333;">
+                    {{ self.cuerpo|richtext }}
+                </div>
+
+                <div class="mt-5 pt-4 border-top">
+                    <a href="/" class="btn btn-outline-primary rounded-pill px-4">
+                        <i class="fas fa-arrow-left me-2"></i> Volver a la Home
+                    </a>
+                </div>
             </div>
-            
-            <hr class="my-5">
-            <a href="/" class="btn btn-outline-primary">← Volver al inicio</a>
         </div>
     </div>
 </article>
+
+<style>
+    .noticia-hero {
+        position: relative;
+        height: 450px;
+        background-color: #005941;
+        overflow: hidden;
+    }
+
+    .hero-img {
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .hero-overlay {
+        height: 100%;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+    }
+
+    .glass-header {
+        background: rgba(0, 89, 65, 0.4);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        max-width: 90%;
+    }
+
+    .noticia-cuerpo img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        margin: 20px 0;
+    }
+
+    .noticia-cuerpo p {
+        margin-bottom: 25px;
+    }
+
+    /* Estilo para los textos de la UNLP */
+    h1,
+    h2,
+    h3 {
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    /* Color para el número de la fecha */
+    .date-badge .text-primary {
+        color: #005941 !important;
+    }
+
+    /* Color para el botón 'Volver a la Home' */
+    .btn-outline-primary {
+        color: #005941;
+        border-color: #005941;
+    }
+
+    /* Efecto hover del botón para que no se pierda */
+    .btn-outline-primary:hover {
+        background-color: #005941;
+        border-color: #005941;
+        color: white;
+    }
+
+    /* Ajuste del borde azul lateral del resumen si también lo querés verde */
+    .noticia-detalle .lead {
+        border-left-color: #005941 !important;
+    }
+</style>
 {% endblock %}

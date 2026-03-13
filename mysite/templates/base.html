@@ -60,10 +60,10 @@
                         <li class="nav-item dropdown-hover">
                             <a class="nav-link" href="#">Institucional</a>
                             <ul class="dropdown-custom shadow">
-                                <li><a href="#">Principal Institucional</a></li>
+                                <li><a href="{% slugurl 'institucional' %}">Principal Institucional</a></li>
                                 <li><a href="#">Autoridades</a></li>
-                                <li><a href="#">Historia</a></li>
-                                <li><a href="#">Hospital Universitario</a></li>
+                                <li><a href="{% slugurl 'historia' %}">Historia</a></li>
+                                <li><a href="{% slugurl 'hospital' %}">Hospital Universitario</a></li>
                                 <li><a href="#">Museo</a></li>
                                 <li><a href="#">Identidad Visual</a></li>
                             </ul>
@@ -72,10 +72,10 @@
                         <li class="nav-item dropdown-hover">
                             <a class="nav-link" href="#">Estudiantiles</a>
                             <ul class="dropdown-custom shadow">
-                                <li><a href="#">Principal Estudiantiles</a></li>
+                                <li><a href="{% slugurl 'estudiantiles' %}">Principal Estudiantiles</a></li>
                                 <li><a href="#">Noticias</a></li>
                                 <li><a href="#">Informacion de Asignaturas</a></li>
-                                <li><a href="#">Becas</a></li>
+                                <li><a href="{% slugurl 'becas' %}">Becas</a></li>
                                 <li><a href="#">Historia Clinica y Material de Descarga</a></li>
                             </ul>
                         </li>
@@ -110,7 +110,7 @@
                                 <li><a href="#">Doctorado</a></li>
                                 <li><a href="#">Maestrias</a></li>
                                 <li><a href="#">Especializaciones</a></li>
-                                <li><a href="#">Cursos</a></li>
+                                <li><a href="{% slugurl 'cursos' %}">Cursos</a></li>
                                 <li><a href="#">Tramite de Titulo</a></li>
                             </ul>
                         </li>

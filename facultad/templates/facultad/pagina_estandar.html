@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+<article>
+    {# Header de la página #}
+    <div class="py-5" style="background-color: #f8f9fa; border-bottom: 1px solid #dee2e6;">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-2">
+                    <li class="breadcrumb-item"><a href="/" style="color: #005941;">Inicio</a></li>
+                    <li class="breadcrumb-item active">{{ self.title }}</li>
+                </ol>
+            </nav>
+            <h1 class="display-4 fw-bold" style="color: #005941;">{{ self.title }}</h1>
+            {% if self.subtitulo %}
+                <p class="lead text-muted">{{ self.subtitulo }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
+                {% if self.imagen_principal %}
+                    {% image self.imagen_principal fill-1200x500 as banner %}
+                    <img src="{{ banner.url }}" class="img-fluid rounded-4 shadow-sm mb-5" alt="{{ self.title }}">
+                {% endif %}
+
+                <div class="contenido-estandar" style="font-size: 1.1rem; line-height: 1.8;">
+                    {% for block in self.cuerpo %}
+                        <div class="block-{{ block.block_type }} mb-4">
+                            {% include_block block %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</article>
+<style>
+    /* Espaciado para los bloques del StreamField */
+    .contenido-estandar p {
+        margin-bottom: 1.6rem;
+        color: #444;
+    }
+
+    /* Estilo para los títulos que metas dentro del texto */
+    .contenido-estandar h2, .contenido-estandar h3 {
+        color: #005941;
+        margin-top: 2.5rem;
+        margin-bottom: 1.2rem;
+        font-weight: 700;
+    }
+
+    /* Para que los videos de YouTube no queden gigantes o desalineados */
+    .block-video {
+        position: relative;
+        padding-bottom: 56.25%; /* Relación 16:9 */
+        height: 0;
+        overflow: hidden;
+        border-radius: 12px;
+        margin: 3rem 0;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .block-video iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    /* Imágenes dentro del cuerpo */
+    .block-imagen img {
+        border-radius: 8px;
+        margin: 2rem 0;
+        width: 100%;
+        height: auto;
+    }
+</style>
+{% endblock %}
