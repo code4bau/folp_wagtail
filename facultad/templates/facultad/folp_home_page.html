@@ -127,5 +127,66 @@
             {% endfor %}
         </div>
     </div>
+     <div class="container my-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm overflow-hidden"
+                    style="border-radius: 12px; border: 1px solid #eee !important;">
+                    <div class="bg-green py-2 px-4 d-flex justify-content-between align-items-center"
+                        style="border-bottom: 1px solid #f0f0f0;">
+                        <span class="fw-bold text-dark small text-uppercase"
+                            style="letter-spacing: 1px; color: #005941 !important;">
+                            <i class="fas fa-map-marker-alt text-danger me-2"></i> Red de Consultorios Odontológicos
+                        </span>
+                        <a href="https://www.google.com/maps/d/embed?mid=1C8GhLPAtDUs1R22-XB6JVqrs5XJCXrQe"
+                            target="_blank" class="btn-leer-mas" style="font-size: 0.75rem;">Ver en pantalla
+                            completa</a>
+                    </div>
+                    <div class="ratio ratio-21x9" style="min-height: 400px;">
+                        <iframe src="https://www.google.com/maps/d/embed?mid=1C8GhLPAtDUs1R22-XB6JVqrs5XJCXrQe" width="100%" height="100%" style="border:0;"
+                            allowfullscreen="" loading="lazy">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
+{% for noticia in noticias %}
+    {% if noticia.convertir_en_popup %}
+        <div class="modal fade" id="modalNoticia{{ noticia.id }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow-lg" style="border-radius: 20px; overflow: hidden;">
+                    <div class="modal-header border-0 pb-0">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center p-4 pt-0">
+                        {% if noticia.imagen %}
+                            {% image noticia.imagen fill-800x600 as img_pop %}
+                            <img src="{{ img_pop.url }}" class="img-fluid rounded-4 mb-3 shadow-sm" alt="{{ noticia.title }}">
+                        {% endif %}
+                        
+                        <h3 class="fw-bold" style="color: #005941;">{{ noticia.title }}</h3>
+                        <p class="text-muted">{{ noticia.resumen }}</p>
+                        
+                        <div class="mt-4">
+                            <a href="{% if noticia.link_externo %}{% pageurl noticia.link_externo %}{% else %}{% pageurl noticia %}{% endif %}" 
+                               class="btn btn-lg rounded-pill px-5" 
+                               style="background-color: #005941; color: white;">
+                                Ver Noticia Completa
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                var myModal = new bootstrap.Modal(document.getElementById('modalNoticia{{ noticia.id }}'));
+                myModal.show();
+            });
+        </script>
+    {% endif %}
+{% endfor %}
 {% endblock %}

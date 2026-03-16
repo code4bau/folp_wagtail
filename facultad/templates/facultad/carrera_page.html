@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags static %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-8">
+            <h1 class="fw-bold mb-4" style="color: #005941; border-bottom: 2px solid #eee; padding-bottom: 15px;">
+                {{ page.titulo_carrera }}
+            </h1>
+
+            <div class="card border-0 shadow-sm" style="border-radius: 12px; overflow: hidden;">
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <thead style="background-color: #f8f9fa;">
+                            <tr class="text-uppercase small fw-bold text-muted">
+                                <th class="ps-4 py-3">Código</th>
+                                <th class="py-3">Nombre de la Materia</th>
+                                <th class="py-3 text-end pe-4">Periodicidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for block in page.plan_estudios %}
+                            {% if block.block_type == 'titulo_anio' %} {# <--- ACÁ TAMBIÉN CAMBIÁ 'año' por 'anio' #}
+                                <tr class="bg-white">
+                                <td colspan="3" class="ps-4 py-4">
+                                    <h4 class="m-0 fw-bold text-success text-uppercase">
+                                        {{ block.value }}
+                                    </h4>
+                                </td>
+                                </tr>
+                                {% elif block.block_type == 'subtitulo_periodo' %}
+                                <tr style="background-color: #fffaf4;">
+                                    <td colspan="3" class="ps-4 py-2">
+                                        <span class="small fw-bold text-uppercase"
+                                            style="color: #b37400; font-size: 0.75rem;">
+                                            {{ block.value }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% elif block.block_type == 'materia' %}
+                                <tr class="align-middle">
+                                    <td class="ps-4 text-muted small">{{ block.value.codigo }}</td>
+                                    <td>
+                                        <a href="#" class="text-decoration-none fw-bold"
+                                            style="color: #1c705b; transition: 0.2s;">
+                                            {{ block.value.nombre }}
+                                        </a>
+                                    </td>
+                                    <td class="text-end pe-4 text-muted small">{{ block.value.periodicidad }}</td>
+                                </tr>
+                                {% endif %}
+                                {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Efecto hover en filas de materia */
+    tbody tr:hover {
+        background-color: #fdfdfd;
+    }
+
+    tbody tr a:hover {
+        color: #00bc8c !important;
+    }
+</style>
+{% endblock %}

@@ -54,6 +54,53 @@
         </div>
     </div>
 </article>
+<div class="noticia-cuerpo mt-4">
+    {{ self.cuerpo|richtext }}
+</div>
+{% if self.boton_accion %}
+<div class="mt-4 mb-5">
+    {% for block in self.boton_accion %}
+    {% with b=block.value %}
+    {# Lógica para decidir qué URL usar #}
+    {# Lógica: Si hay archivo de Wagtail, lo usamos. Si no, usamos la URL externa #}
+    <a href="{% if b.archivo %}{{ b.archivo.url }}{% else %}{{ b.url_externa }}{% endif %}" class="btn-accion-folp"
+        target="_blank" download>
+
+        {% if b.imagen_logo %}
+        {% image b.imagen_logo fill-25x25 as ico %}
+        <img src="{{ ico.url }}" class="me-2">
+        {% elif b.icono_fontawesome %}
+        <i class="fas {{ b.icono_fontawesome }} me-2"></i>
+        {% endif %}
+
+        <span>{{ b.texto }}</span>
+    </a>
+    {% endwith %}
+    {% endfor %}
+</div>
+{% endif %}
+
+<style>
+    .btn-accion-folp {
+        display: inline-flex;
+        align-items: center;
+        background-color: #005941;
+        color: white !important;
+        padding: 12px 24px;
+        border-radius: 50px;
+        /* Estética redondeada UNLP */
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 89, 65, 0.2);
+    }
+
+    .btn-accion-folp:hover {
+        background-color: #1c705b;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 89, 65, 0.3);
+    }
+</style>
 
 <style>
     .noticia-hero {
