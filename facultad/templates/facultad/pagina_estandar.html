@@ -28,12 +28,7 @@
                 {% endif %}
 
                 <div class="contenido-estandar" style="font-size: 1.1rem; line-height: 1.8;">
-                    {% for block in self.cuerpo %}
-                    <div class="block-{{ block.block_type }} mb-4">
-                        {% include_block block %}
-                    </div>
-                    {% endfor %}
-                </div>
+                    {{ self.cuerpo|richtext }}
             </div>
         </div>
     </div>

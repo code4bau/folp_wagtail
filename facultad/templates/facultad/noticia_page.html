@@ -3,7 +3,7 @@
 
 {% block content %}
 <article class="noticia-detalle">
-    {# 1. CABECERA: Imagen a pantalla completa o gran tamaño #}
+    {# 1. CABECERA #}
     {% if self.imagen %}
     <div class="noticia-hero">
         {% image self.imagen fill-1600x600 as header_img %}
@@ -23,10 +23,10 @@
     <div class="container my-5">
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                {# 2. METADATOS: Fecha y autor #}
+                {# 2. METADATOS #}
                 <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
                     <div class="date-badge me-3">
-                        <span class="d-block fw-bold text-primary h4 mb-0">{{ self.fecha|date:"d" }}</span>
+                        <span class="d-block fw-bold h4 mb-0" style="color: #005941;">{{ self.fecha|date:"d" }}</span>
                         <span class="text-uppercase small text-muted">{{ self.fecha|date:"M" }}</span>
                     </div>
                     <div class="info-meta">
@@ -35,18 +35,39 @@
                     </div>
                 </div>
 
-                {# 3. RESUMEN: Un texto introductorio destacado #}
+                {# 3. RESUMEN #}
                 <p class="lead fw-bold mb-5" style="color: #444; border-left: 4px solid #005941; padding-left: 20px;">
                     {{ self.resumen }}
                 </p>
 
-                {# 4. CUERPO: El contenido principal #}
+                {# 4. CUERPO (Solo una vez y con richtext) #}
                 <div class="noticia-cuerpo" style="font-size: 1.1rem; line-height: 1.8; color: #333;">
                     {{ self.cuerpo|richtext }}
                 </div>
 
-                <div class="mt-5 pt-4 border-top">
-                    <a href="/" class="btn btn-outline-primary rounded-pill px-4">
+                {# 5. BOTÓN DE ACCIÓN (Descargas/PDF) #}
+                {% if self.boton_accion %}
+                <div class="mt-5 mb-4">
+                    {% for block in self.boton_accion %}
+                        {% with b=block.value %}
+                        <a href="{% if b.archivo %}{{ b.archivo.url }}{% else %}{{ b.url_externa }}{% endif %}" 
+                           class="btn-accion-folp d-inline-flex align-items-center"
+                           target="_blank" download>
+                            {% if b.imagen_logo %}
+                                {% image b.imagen_logo fill-25x25 as ico %}
+                                <img src="{{ ico.url }}" class="me-2">
+                            {% elif b.icono_fontawesome %}
+                                <i class="fas {{ b.icono_fontawesome }} me-2"></i>
+                            {% endif %}
+                            <span>{{ b.texto }}</span>
+                        </a>
+                        {% endwith %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <div class="mt-5 pt-4 border-top text-center">
+                    <a href="/" class="btn btn-outline-folp rounded-pill px-4">
                         <i class="fas fa-arrow-left me-2"></i> Volver a la Home
                     </a>
                 </div>
@@ -54,119 +75,43 @@
         </div>
     </div>
 </article>
-<div class="noticia-cuerpo mt-4">
-    {{ self.cuerpo|richtext }}
-</div>
-{% if self.boton_accion %}
-<div class="mt-4 mb-5">
-    {% for block in self.boton_accion %}
-    {% with b=block.value %}
-    {# Lógica para decidir qué URL usar #}
-    {# Lógica: Si hay archivo de Wagtail, lo usamos. Si no, usamos la URL externa #}
-    <a href="{% if b.archivo %}{{ b.archivo.url }}{% else %}{{ b.url_externa }}{% endif %}" class="btn-accion-folp"
-        target="_blank" download>
-
-        {% if b.imagen_logo %}
-        {% image b.imagen_logo fill-25x25 as ico %}
-        <img src="{{ ico.url }}" class="me-2">
-        {% elif b.icono_fontawesome %}
-        <i class="fas {{ b.icono_fontawesome }} me-2"></i>
-        {% endif %}
-
-        <span>{{ b.texto }}</span>
-    </a>
-    {% endwith %}
-    {% endfor %}
-</div>
-{% endif %}
 
 <style>
+    /* Estilos del Botón de Acción */
     .btn-accion-folp {
-        display: inline-flex;
-        align-items: center;
         background-color: #005941;
         color: white !important;
-        padding: 12px 24px;
+        padding: 12px 28px;
         border-radius: 50px;
-        /* Estética redondeada UNLP */
         text-decoration: none;
         font-weight: 600;
         transition: all 0.3s ease;
         box-shadow: 0 4px 15px rgba(0, 89, 65, 0.2);
     }
-
     .btn-accion-folp:hover {
         background-color: #1c705b;
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(0, 89, 65, 0.3);
-    }
-</style>
-
-<style>
-    .noticia-hero {
-        position: relative;
-        height: 450px;
-        background-color: #005941;
-        overflow: hidden;
     }
 
-    .hero-img {
-        height: 100%;
-        background-size: cover;
-        background-position: center;
-    }
-
-    .hero-overlay {
-        height: 100%;
-        background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
-    }
-
-    .glass-header {
-        background: rgba(0, 89, 65, 0.4);
-        backdrop-filter: blur(8px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        max-width: 90%;
-    }
-
-    .noticia-cuerpo img {
-        max-width: 100%;
-        height: auto;
-        border-radius: 8px;
-        margin: 20px 0;
-    }
-
-    .noticia-cuerpo p {
-        margin-bottom: 25px;
-    }
-
-    /* Estilo para los textos de la UNLP */
-    h1,
-    h2,
-    h3 {
-        font-family: 'Montserrat', sans-serif;
-    }
-
-    /* Color para el número de la fecha */
-    .date-badge .text-primary {
-        color: #005941 !important;
-    }
-
-    /* Color para el botón 'Volver a la Home' */
-    .btn-outline-primary {
+    /* Botón Volver */
+    .btn-outline-folp {
         color: #005941;
-        border-color: #005941;
+        border: 2px solid #005941;
+        transition: 0.3s;
     }
-
-    /* Efecto hover del botón para que no se pierda */
-    .btn-outline-primary:hover {
+    .btn-outline-folp:hover {
         background-color: #005941;
-        border-color: #005941;
         color: white;
     }
 
-    /* Ajuste del borde azul lateral del resumen si también lo querés verde */
-    .noticia-detalle .lead {
-        border-left-color: #005941 !important;
-    }
+    /* Hero e Imagen */
+    .noticia-hero { position: relative; height: 450px; background-color: #005941; overflow: hidden; }
+    .hero-img { height: 100%; background-size: cover; background-position: center; }
+    .hero-overlay { height: 100%; background: linear-gradient(transparent, rgba(0, 0, 0, 0.7)); }
+    .glass-header { background: rgba(0, 89, 65, 0.4); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2); }
+
+    /* Contenido */
+    .noticia-cuerpo img { max-width: 100%; height: auto; border-radius: 8px; margin: 25px 0; display: block; }
+    .noticia-cuerpo p { margin-bottom: 25px; }
 </style>
 {% endblock %}

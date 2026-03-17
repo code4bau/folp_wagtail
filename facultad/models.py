@@ -2,11 +2,13 @@ from django.db import models
 from wagtail.models import Page
 from wagtail.fields import StreamField, RichTextField
 from wagtail import blocks
-from wagtail.admin.panels import FieldPanel
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.models import register_snippet
-from wagtail.embeds.blocks import EmbedBlock  # Correcto
+from wagtail.embeds.blocks import EmbedBlock
 from wagtail.documents.blocks import DocumentChooserBlock
+
+# --- 1. SNIPPETS ---
 
 @register_snippet
 class Alerta(models.Model):
@@ -23,6 +25,32 @@ class Alerta(models.Model):
     def __str__(self):
         return self.texto
 
+
+# --- 2. BLOQUES REUTILIZABLES (Deber ir antes de las clases Page) ---
+
+class BotonPopUpBlock(blocks.StructBlock):
+    texto_boton = blocks.CharBlock(required=True, label="Texto del Botón (ej: Ver Especialización)")
+    titulo_ventana = blocks.CharBlock(required=True, label="Título de la ventana pop-up")
+    cuerpo_ventana = blocks.RichTextBlock(label="Contenido que va adentro del pop-up")
+    icono = blocks.CharBlock(required=False, help_text="Ej: fa-graduation-cap", label="Icono FontAwesome")
+
+    class Meta:
+        icon = "doc-full"
+        label = "Botón con Ventana Emergente"
+
+
+class MateriaBlock(blocks.StructBlock):
+    codigo = blocks.CharBlock(required=False, max_length=10, label="Código")
+    nombre = blocks.CharBlock(required=True, label="Nombre de la materia")
+    periodicidad = blocks.CharBlock(required=False, label="Periodicidad (Ej: 1er C.)")
+
+    class Meta:
+        icon = "form"
+        label = "Materia"
+
+
+# --- 3. PÁGINAS ---
+
 class NoticiaPage(Page):
     fecha = models.DateField("Fecha de publicación")
     imagen = models.ForeignKey(
@@ -33,80 +61,50 @@ class NoticiaPage(Page):
         related_name='+'
     )
     resumen = models.CharField(max_length=250)
-    cuerpo = RichTextField()
+    cuerpo = RichTextField(blank=True)
 
-    content_panels = Page.content_panels + [
-        FieldPanel('fecha'),
-        FieldPanel('imagen'),
-        FieldPanel('resumen'),
-        FieldPanel('cuerpo'),
-    ]
-    # AGREGAMOS ESTO: Un selector para elegir una página interna de destino
+
+    prioridad = models.IntegerField(default=10)
+    ancho = models.CharField(
+        max_length=20, 
+        choices=[('col-md-4', 'Chica'), ('col-md-8', 'Mediana'), ('col-12', 'Grande')], 
+        default='col-md-4'
+    )
+    
+    mostrar_texto_en_home = models.BooleanField(default=True)
+    convertir_en_popup = models.BooleanField(default=False)
+    link_externo = models.ForeignKey('wagtailcore.Page', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+
     link_externo = models.ForeignKey(
         'wagtailcore.Page',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
         related_name='+',
-        help_text="Si elegís una página acá, el botón 'Leer más' llevará a esa página en lugar de a la noticia misma."
-    )
-    prioridad = models.IntegerField(default=10, help_text="1 es lo más importante (aparece primero). 10 es lo normal.")
-
-    content_panels = Page.content_panels + [
-        FieldPanel('fecha'),
-        FieldPanel('imagen'),
-        FieldPanel('resumen'),
-        FieldPanel('cuerpo'),
-        FieldPanel('link_externo'), # Nuevo panel en el Admin
-        FieldPanel('prioridad'), # Agregamos este panel
-    ]
-
-    CHOICES_ANCHO = [
-        ('col-md-4', 'Chica (1/3 de línea)'),
-        ('col-md-8', 'Mediana (2/3 de línea)'),
-        ('col-12', 'Grande (Toda la línea)'),
-    ]
-    
-    ancho = models.CharField(
-        max_length=20, 
-        choices=CHOICES_ANCHO, 
-        default='col-md-4',
-        help_text="Elegí cuánto espacio ocupa esta noticia en la Home"
-    )
-
-    convertir_en_popup = models.BooleanField(
-        default=False, 
-        help_text="Si se marca, esta noticia aparecerá como un anuncio emergente al cargar la Home."
     )
 
     boton_accion = StreamField([
         ('boton', blocks.StructBlock([
-            ('texto', blocks.CharBlock(required=True, label="Texto del botón")),
-            ('archivo', DocumentChooserBlock(required=False, label="Subir/Elegir Documento")),
-            ('url_externa', blocks.URLBlock(required=False, label="Link Externo")),
-            ('icono_fontawesome', blocks.CharBlock(required=False, placeholder="fa-file-pdf")),
+            ('texto', blocks.CharBlock(required=True)),
+            ('archivo', DocumentChooserBlock(required=False)),
+            ('url_externa', blocks.URLBlock(required=False)),
+            ('icono_fontawesome', blocks.CharBlock(required=False)),
             ('imagen_logo', ImageChooserBlock(required=False)),
-        ], icon='doc-full'))
+        ]))
     ], use_json_field=True, blank=True)
-
 
     content_panels = Page.content_panels + [
         FieldPanel('prioridad'),
-        FieldPanel('ancho'), # Nuevo panel
+        FieldPanel('ancho'),
         FieldPanel('fecha'),
         FieldPanel('imagen'),
         FieldPanel('resumen'),
+        FieldPanel('mostrar_texto_en_home'),
         FieldPanel('convertir_en_popup'),
         FieldPanel('boton_accion'),
-        FieldPanel('cuerpo'),
+        FieldPanel('cuerpo'),          # Texto original recuperado
         FieldPanel('link_externo'),
-        FieldPanel('mostrar_texto_en_home'), # Nuevo Switch
     ]
-
-    mostrar_texto_en_home = models.BooleanField(
-        default=True, 
-        help_text="Si se desmarca, en la Home solo se verá la imagen (ideal para banners diseñados)."
-    )
 
 class FolpHomePage(Page):
     body = StreamField([
@@ -115,11 +113,10 @@ class FolpHomePage(Page):
                 ('titulo', blocks.CharBlock(required=True)),
                 ('subtitulo', blocks.TextBlock(required=False)),
                 ('imagen', ImageChooserBlock()),
-                ('link', blocks.PageChooserBlock(required=False, help_text="Elegí la noticia a la que lleva")),
+                ('link', blocks.PageChooserBlock(required=False)),
             ]),
             template='facultad/blocks/hero_slider.html'
         )),
-
         ('accesos_rapidos', blocks.ListBlock(
             blocks.StructBlock([
                 ('imagen_logo', ImageChooserBlock(required=True)),
@@ -151,22 +148,19 @@ class PaginaEstandar(Page):
         on_delete=models.SET_NULL,
         related_name='+'
     )
-    cuerpo = StreamField([
-        ('parrafo', blocks.RichTextBlock()),
-        ('imagen', ImageChooserBlock()),
-        ('video', EmbedBlock(help_text="Pegá el link de YouTube")), # SIN 'blocks.'
-    ], use_json_field=True)
+    
+    # Aplicamos la misma lógica para no romper nada
+    cuerpo = RichTextField(blank=True)
 
     boton_accion = StreamField([
         ('boton', blocks.StructBlock([
-            ('texto', blocks.CharBlock(required=False, help_text="Ej: Descargar PDF")),
-            ('url_o_archivo', blocks.URLBlock(required=False, help_text="Pegá el link aquí")),
-            ('documento', blocks.PageChooserBlock(required=False, help_text="O elegí una página interna")),
-            ('icono_fontawesome', blocks.CharBlock(required=False, help_text="Ej: fa-file-pdf")),
-            ('imagen_logo', ImageChooserBlock(required=False, help_text="Logo chiquito")),
-        ], icon='link'))
-    ], use_json_field=True, blank=True, max_num=1)
-
+            ('texto', blocks.CharBlock(required=False)),
+            ('url_o_archivo', blocks.URLBlock(required=False)),
+            ('documento', blocks.PageChooserBlock(required=False)),
+            ('icono_fontawesome', blocks.CharBlock(required=False)),
+            ('imagen_logo', ImageChooserBlock(required=False)),
+        ]))
+    ], use_json_field=True, blank=True)
 
     content_panels = Page.content_panels + [
         FieldPanel('subtitulo'),
@@ -175,27 +169,13 @@ class PaginaEstandar(Page):
         FieldPanel('boton_accion'),
     ]
 
-    class Meta:
-        verbose_name = "Página Estándar"
-
-class MateriaBlock(blocks.StructBlock):
-    codigo = blocks.CharBlock(required=False, max_length=10, label="Código")
-    nombre = blocks.CharBlock(required=True, label="Nombre de la materia")
-    periodicidad = blocks.CharBlock(required=False, label="Periodicidad (Ej: 1er C.)")
-
-    class Meta:
-        icon = "form"
-        label = "Materia"
-
 class CarreraPage(Page):
-    # Encabezado
     titulo_carrera = models.CharField(max_length=255, default="Carrera Odontología")
     
-    # Columna Principal (Plan de estudios)
     plan_estudios = StreamField([
-        ('titulo_anio', blocks.CharBlock(group="Estructura", label="Título de Año")), # Cambiamos 'año' por 'anio'
-        ('subtitulo_periodo', blocks.CharBlock(group="Estructura", label="Subtítulo de Periodo")),
-        ('materia', MateriaBlock(group="Contenido")),
+        ('titulo_anio', blocks.CharBlock(label="Título de Año")),
+        ('subtitulo_periodo', blocks.CharBlock(label="Subtítulo de Periodo")),
+        ('materia', MateriaBlock(label="Materia")),
     ], use_json_field=True)
 
     content_panels = Page.content_panels + [
@@ -205,7 +185,5 @@ class CarreraPage(Page):
 
     def get_context(self, request):
         context = super().get_context(request)
-        # Traemos las últimas 2 noticias para el sidebar automáticamente
-        from .models import NoticiaPage
         context['notas_destacadas'] = NoticiaPage.objects.live().order_by('-fecha')[:2]
         return context

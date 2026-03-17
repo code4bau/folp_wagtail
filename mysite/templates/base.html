@@ -110,9 +110,9 @@
                                 <li><a href="{% slugurl 'posgrado' %}">Principal Posgrado</a></li>
                                 <li><a href="{% slugurl 'doctorado' %}">Doctorado</a></li>
                                 <li><a href="{% slugurl 'maestrias' %}">Maestrias</a></li>
-                                <li><a href="#">Especializaciones</a></li>
+                                <li><a href="{% slugurl 'especializaciones' %}">Especializaciones</a></li>
                                 <li><a href="{% slugurl 'cursos' %}">Cursos</a></li>
-                                <li><a href="#">Tramite de Titulo</a></li>
+                                <li><a href="{% slugurl 'titposgrado' %}">Tramite de Titulo</a></li>
                             </ul>
                         </li>
 
@@ -171,13 +171,19 @@
         <div class="container">
             <div class="row g-4">
                 <div class="col-md-4">
-                    <h5 class="fw-bold mb-4" style="color: #00bc8c;">FOLP-UNLP</h5>
-                    <p class="small opacity-75">Facultad de Odontología<br>Universidad Nacional de La Plata.</p>
-                    <div class="d-flex gap-3 mt-4">
+                    <div class="flex items-center justify-center ">
+                        <img src="../../media/images/logo folpunlp blanco.png" style="height: 50px;" alt="Logo FOLP"
+                            class="flex-shrink-0 h-10">
+                    </div>
+                    <br>
+                    <h6 class="text-uppercase fw-bold mb-3 small" style="letter-spacing: 1px;">Nuestras Redes</h6>
+                    <div class="d-flex gap-3">
                         <a href="#" class="text-white opacity-75 hover-opacity-100"><i
                                 class="fab fa-facebook fa-lg"></i></a>
                         <a href="#" class="text-white opacity-75 hover-opacity-100"><i
                                 class="fab fa-instagram fa-lg"></i></a>
+                        <a href="#" class="text-white opacity-75 hover-opacity-100"><i
+                                class="fab fa-youtube fa-lg"></i></a>
                     </div>
                 </div>
 
@@ -185,7 +191,7 @@
                     <h6 class="text-uppercase fw-bold mb-3 small" style="letter-spacing: 1px;">Contacto</h6>
                     <ul class="list-unstyled small opacity-75">
                         <li class="mb-2">Calle 1 y 115, La Plata</li>
-                        <li class="mb-2">(0221) 423-6775</li>
+                        <li class="mb-2">Tel: (54) 221 423-6775 / 6776 / 6777</li>
                         <li class="mb-2">info@folp.unlp.edu.ar</li>
                     </ul>
                 </div>
