@@ -119,31 +119,32 @@
                         <li class="nav-item dropdown-hover">
                             <a class="nav-link" href="#">Extension</a>
                             <ul class="dropdown-custom shadow">
-                                <li><a href="#">Principal Extension</a></li>
-                                <li><a href="#">Programas y Proyectos</a></li>
-                                <li><a href="#">Politicas Sociales</a></li>
-                                <li><a href="#">Voluntariado</a></li>
-                                <li><a href="#">Revista Entornos</a></li>
+                                <li><a href="{% slugurl 'extension' %}">Principal Extension</a></li>
+                                <li><a href="{% slugurl 'programas' %}">Programas y Proyectos</a></li>
+                                <li><a href="{% slugurl 'politicas' %}">Politicas Sociales</a></li>
+                                <li><a href="">Voluntariado</a></li>
+                                <li><a href="{% slugurl 'entornos' %}">Revista Entornos</a></li>
                             </ul>
                         </li>
 
                         <li class="nav-item dropdown-hover">
                             <a class="nav-link" href="#">Prosecretaria de APS</a>
                             <ul class="dropdown-custom shadow">
-                                <li><a href="#">ADEI</a></li>
+                                <li><a href="{% slugurl 'aps' %}">Principal APS</a></li>
+                                <li><a href="{% slugurl 'adei' %}">ADEI</a></li>
                                 <li><a href="#">Expo Universidad</a></li>
                                 <li><a href="#">Jornada de Extension</a></li>
-                                <li><a href="#">Mes de la Extension</a></li>
+                                <li><a href="{% slugurl 'mes' %}">Mes de la Extension</a></li>
                             </ul>
                         </li>
 
                         <li class="nav-item dropdown-hover">
                             <a class="nav-link" href="#">Gestión</a>
                             <ul class="dropdown-custom shadow">
-                                <li><a href="#">Principal Gestion</a></li>
+                                <li><a href="{% slugurl 'gestion' %}">Principal Gestion</a></li>
                                 <li><a href="#">Decanato</a></li>
                                 <li><a href="#">Obras y Planeamiento</a></li>
-                                <li><a href="#">Acreditacion CONEAU</a></li>
+                                <li><a href="{% slugurl 'coneau' %}">Acreditacion CONEAU</a></li>
                                 <li><a href="#">Noticias</a></li>
                                 <li><a href="#">Seguridad e Higiene</a></li>
                                 <li><a href="#">Pliego de Compras</a></li>
@@ -154,8 +155,8 @@
                             <a class="nav-link" href="#">Secretarias</a>
                             <ul class="dropdown-custom shadow">
                                 <li><a href="#">Secretaria de Ciencia y Técnica</a></li>
-                                <li><a href="#">Secretaria de Posgrado</a></li>
-                                <li><a href="#">Secretaria de Extension</a></li>
+                                <li><a href="{% slugurl 'secretariap' %}">Secretaria de Posgrado</a></li>
+                                <li><a href="{% slugurl 'secretariae' %}">Secretaria de Extension</a></li>
                             </ul>
                         </li>
                     </ul>

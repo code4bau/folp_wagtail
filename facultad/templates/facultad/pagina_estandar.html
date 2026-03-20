@@ -29,31 +29,42 @@
 
                 <div class="contenido-estandar" style="font-size: 1.1rem; line-height: 1.8;">
                     {{ self.cuerpo|richtext }}
+                </div>
+                {% if self.video_url %}
+                <div class="container-video-folp my-5">
+                    <div class="ratio ratio-16x9 shadow-lg"
+                        style="border-radius: 15px; overflow: hidden; border: 1px solid #eee;">
+                        <iframe src="{{ self.video_embed_url}}" title="Video" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+                {% endif %}
             </div>
         </div>
-    </div>
-    {% if self.boton_accion %}
-    <div class="mt-4 mb-5">
-        {% for block in self.boton_accion %}
-        {% with b=block.value %}
-        {# Lógica para decidir qué URL usar #}
-        {# Lógica: Si hay archivo de Wagtail, lo usamos. Si no, usamos la URL externa #}
-        <a href="{% if b.archivo %}{{ b.archivo.url }}{% else %}{{ b.url_externa }}{% endif %}" class="btn-accion-folp"
-            target="_blank" download>
+        {% if self.boton_accion %}
+        <div class="mt-4 mb-5">
+            {% for block in self.boton_accion %}
+            {% with b=block.value %}
+            {# Lógica para decidir qué URL usar #}
+            {# Lógica: Si hay archivo de Wagtail, lo usamos. Si no, usamos la URL externa #}
+            <a href="{% if b.archivo %}{{ b.archivo.url }}{% else %}{{ b.url_externa }}{% endif %}"
+                class="btn-accion-folp" target="_blank" download>
 
-            {% if b.imagen_logo %}
-            {% image b.imagen_logo fill-25x25 as ico %}
-            <img src="{{ ico.url }}" class="me-2">
-            {% elif b.icono_fontawesome %}
-            <i class="fas {{ b.icono_fontawesome }} me-2"></i>
-            {% endif %}
+                {% if b.imagen_logo %}
+                {% image b.imagen_logo fill-25x25 as ico %}
+                <img src="{{ ico.url }}" class="me-2">
+                {% elif b.icono_fontawesome %}
+                <i class="fas {{ b.icono_fontawesome }} me-2"></i>
+                {% endif %}
 
-            <span>{{ b.texto }}</span>
-        </a>
-        {% endwith %}
-        {% endfor %}
-    </div>
-    {% endif %}
+                <span>{{ b.texto }}</span>
+            </a>
+            {% endwith %}
+            {% endfor %}
+        </div>
+        {% endif %}
 </article>
 <style>
     /* Espaciado para los bloques del StreamField */

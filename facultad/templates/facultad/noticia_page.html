@@ -44,24 +44,37 @@
                 <div class="noticia-cuerpo" style="font-size: 1.1rem; line-height: 1.8; color: #333;">
                     {{ self.cuerpo|richtext }}
                 </div>
-
+                {# 4.1 VIDEO DESTACADO (Si el usuario cargó la URL) #}
+                {% if self.video_url %}
+                <div class="noticia-video-container my-5">
+                    <div class="ratio ratio-16x9 shadow-lg" style="border-radius: 15px; overflow: hidden;">
+                        {# Convertimos el link de YouTube a formato 'embed' automáticamente #}
+                        <iframe src="{{ self.video_embed_url}}" title="YouTube video player" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+                        </iframe>
+                    </div>
+                    <p class="text-center text-muted mt-3 small">
+                        <i class="fas fa-play-circle me-1"></i> Video relacionado con la noticia
+                    </p>
+                </div>
+                {% endif %}
                 {# 5. BOTÓN DE ACCIÓN (Descargas/PDF) #}
                 {% if self.boton_accion %}
                 <div class="mt-5 mb-4">
                     {% for block in self.boton_accion %}
-                        {% with b=block.value %}
-                        <a href="{% if b.archivo %}{{ b.archivo.url }}{% else %}{{ b.url_externa }}{% endif %}" 
-                           class="btn-accion-folp d-inline-flex align-items-center"
-                           target="_blank" download>
-                            {% if b.imagen_logo %}
-                                {% image b.imagen_logo fill-25x25 as ico %}
-                                <img src="{{ ico.url }}" class="me-2">
-                            {% elif b.icono_fontawesome %}
-                                <i class="fas {{ b.icono_fontawesome }} me-2"></i>
-                            {% endif %}
-                            <span>{{ b.texto }}</span>
-                        </a>
-                        {% endwith %}
+                    {% with b=block.value %}
+                    <a href="{% if b.archivo %}{{ b.archivo.url }}{% else %}{{ b.url_externa }}{% endif %}"
+                        class="btn-accion-folp d-inline-flex align-items-center" target="_blank" download>
+                        {% if b.imagen_logo %}
+                        {% image b.imagen_logo fill-25x25 as ico %}
+                        <img src="{{ ico.url }}" class="me-2">
+                        {% elif b.icono_fontawesome %}
+                        <i class="fas {{ b.icono_fontawesome }} me-2"></i>
+                        {% endif %}
+                        <span>{{ b.texto }}</span>
+                    </a>
+                    {% endwith %}
                     {% endfor %}
                 </div>
                 {% endif %}
@@ -88,6 +101,7 @@
         transition: all 0.3s ease;
         box-shadow: 0 4px 15px rgba(0, 89, 65, 0.2);
     }
+
     .btn-accion-folp:hover {
         background-color: #1c705b;
         transform: translateY(-2px);
@@ -99,19 +113,68 @@
         border: 2px solid #005941;
         transition: 0.3s;
     }
+
     .btn-outline-folp:hover {
         background-color: #005941;
         color: white;
     }
 
     /* Hero e Imagen */
-    .noticia-hero { position: relative; height: 450px; background-color: #005941; overflow: hidden; }
-    .hero-img { height: 100%; background-size: cover; background-position: center; }
-    .hero-overlay { height: 100%; background: linear-gradient(transparent, rgba(0, 0, 0, 0.7)); }
-    .glass-header { background: rgba(0, 89, 65, 0.4); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2); }
+    .noticia-hero {
+        position: relative;
+        height: 450px;
+        background-color: #005941;
+        overflow: hidden;
+    }
+
+    .hero-img {
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .hero-overlay {
+        height: 100%;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+    }
+
+    .glass-header {
+        background: rgba(0, 89, 65, 0.4);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
 
     /* Contenido */
-    .noticia-cuerpo img { max-width: 100%; height: auto; border-radius: 8px; margin: 25px 0; display: block; }
-    .noticia-cuerpo p { margin-bottom: 25px; }
+    .noticia-cuerpo img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        margin: 25px 0;
+        display: block;
+    }
+
+    .noticia-cuerpo p {
+        margin-bottom: 25px;
+    }
+
+    /* Esto fuerza a que todos los embeds de Wagtail sean responsivos */
+    .noticia-cuerpo .responsive-object,
+    .noticia-cuerpo iframe,
+    .noticia-cuerpo embed {
+        width: 100% !important;
+        height: auto !important;
+        aspect-ratio: 16 / 9;
+        /* Esto mantiene la forma de video de YouTube */
+        border-radius: 12px;
+        margin: 2.5rem 0;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Si Wagtail mete el video adentro de un párrafo, evitamos que se achique */
+    .noticia-cuerpo p>.responsive-object {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
 </style>
 {% endblock %}

@@ -7,6 +7,7 @@ from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.models import register_snippet
 from wagtail.embeds.blocks import EmbedBlock
 from wagtail.documents.blocks import DocumentChooserBlock
+from wagtail.embeds.embeds import get_embed
 
 # --- 1. SNIPPETS ---
 
@@ -82,7 +83,25 @@ class NoticiaPage(Page):
         on_delete=models.SET_NULL,
         related_name='+',
     )
+    elementos_extra = StreamField([('p', blocks.CharBlock())], blank=True, null=True, use_json_field=True)
 
+    video_url = models.URLField(
+        blank=True, 
+        null=True, 
+        help_text="Pegá acá el link de YouTube (ej: https://www.youtube.com/watch?v=...) para que aparezca al final de la noticia."
+    )
+    @property
+    def video_embed_url(self):
+        if self.video_url:
+            import re
+            # Buscamos el ID del video en cualquier formato de link de YouTube
+            match = re.search(r"(?:v=|\/)([0-9A-Za-z_-]{11}).*", self.video_url)
+            if match:
+                video_id = match.group(1)
+                # Retornamos el link de embed con parámetros de seguridad
+                return f"https://www.youtube.com/embed/{video_id}?rel=0"
+        return ""
+    
     boton_accion = StreamField([
         ('boton', blocks.StructBlock([
             ('texto', blocks.CharBlock(required=True)),
@@ -99,6 +118,7 @@ class NoticiaPage(Page):
         FieldPanel('fecha'),
         FieldPanel('imagen'),
         FieldPanel('resumen'),
+        FieldPanel('video_url'),
         FieldPanel('mostrar_texto_en_home'),
         FieldPanel('convertir_en_popup'),
         FieldPanel('boton_accion'),
@@ -148,10 +168,20 @@ class PaginaEstandar(Page):
         on_delete=models.SET_NULL,
         related_name='+'
     )
-    
+    video_url = models.URLField(blank=True, null=True, help_text="Link de YouTube")
+    @property
+    def video_embed_url(self):
+        if self.video_url:
+            import re
+            # Buscamos el ID del video en cualquier formato de link de YouTube
+            match = re.search(r"(?:v=|\/)([0-9A-Za-z_-]{11}).*", self.video_url)
+            if match:
+                video_id = match.group(1)
+                # Retornamos el link de embed con parámetros de seguridad
+                return f"https://www.youtube.com/embed/{video_id}?rel=0"
+        return ""
     # Aplicamos la misma lógica para no romper nada
     cuerpo = RichTextField(blank=True)
-
     boton_accion = StreamField([
         ('boton', blocks.StructBlock([
             ('texto', blocks.CharBlock(required=False)),
@@ -166,6 +196,7 @@ class PaginaEstandar(Page):
         FieldPanel('subtitulo'),
         FieldPanel('imagen_principal'),
         FieldPanel('cuerpo'),
+        FieldPanel('video_url'),
         FieldPanel('boton_accion'),
     ]
 

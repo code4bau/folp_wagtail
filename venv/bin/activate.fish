@@ -33,7 +33,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV /home/code4bau/folp_wagtail/venv
+set -gx VIRTUAL_ENV /home/code4bau/workspace/github.com/folp-unlp/web-institucional-wagtail/venv
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/"bin $PATH

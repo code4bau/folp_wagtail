@@ -1,4 +1,4 @@
-#!/home/code4bau/folp_wagtail/venv/bin/python3
+#!/home/code4bau/workspace/github.com/folp-unlp/web-institucional-wagtail/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys
