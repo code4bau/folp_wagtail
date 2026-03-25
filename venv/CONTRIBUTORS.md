@@ -934,6 +934,19 @@
 * Mustansir Dabhiya
 * bettercallok
 * Ritik Arya
+* Ankit Chaudhary
+* Serkan Korkusuz
+* Kunal Gupta
+* Naman Sharma S
+* Siddheshwar Kadam
+* Pratham Jaiswal
+* Kunal Hemnani
+* Akshat Gupta
+* Divyansh Mishra
+* Gaurav Takhi
+* Ashutosh
+* Garrett Coakley
+* Collins Kubu
 
 ## Translators
 
@@ -944,7 +957,7 @@
 * Bangla: Mahmud Abdur Rahman
 * Basque: Unai Zalakain
 * Belarusian: Stas Rudakou, Andrei Satsevich, Tatsiana Tsygan
-* Bulgarian: Lyuboslav Petrov
+* Bulgarian: Lyuboslav Petrov, Maria Mitova
 * Burmese: ime11
 * Catalan: Antoni Aloy, David Llop, Roger Pons
 * Chinese: hanfeng, Lihan Li, Leway Colin, Adeline Link, Orangle Liu, shengsheng gz

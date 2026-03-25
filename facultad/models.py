@@ -153,7 +153,13 @@ class FolpHomePage(Page):
 
     def get_context(self, request):
         context = super().get_context(request)
-        context['noticias'] = NoticiaPage.objects.live().order_by('prioridad', '-fecha')
+        noticias = list(NoticiaPage.objects.live())
+        videos = list(VideoPage.objects.live())
+        
+        # Combinamos ambas listas y ordenamos
+        todo_el_contenido = sorted(noticias + videos, key=lambda x: x.prioridad)
+        
+        context['contenidos'] = todo_el_contenido
         return context
 
     class Meta:
@@ -218,3 +224,30 @@ class CarreraPage(Page):
         context = super().get_context(request)
         context['notas_destacadas'] = NoticiaPage.objects.live().order_by('-fecha')[:2]
         return context
+
+class VideoPage(Page):
+    video_url = models.URLField(help_text="Pegá el link de YouTube")
+    prioridad = models.IntegerField(default=10)
+    ancho = models.CharField(
+        max_length=20, 
+        choices=[('col-md-4', 'Chica'), ('col-md-8', 'Mediana'), ('col-12', 'Grande')], 
+        default='col-md-4'
+    )
+
+    @property
+    def video_embed_url(self):
+        import re
+        if self.video_url:
+            match = re.search(r"(?:v=|\/)([0-9A-Za-z_-]{11}).*", self.video_url)
+            if match:
+                return f"https://www.youtube.com/embed/{match.group(1)}?rel=0"
+        return ""
+
+    content_panels = Page.content_panels + [
+        FieldPanel('video_url'),
+        FieldPanel('prioridad'),
+        FieldPanel('ancho'),
+    ]
+
+    class Meta:
+        verbose_name = "Video para la Home"
