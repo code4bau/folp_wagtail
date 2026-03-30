@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-8">
+            <h1 class="fw-bold mb-4" style="color: #005941;">{{ page.title }}</h1>
+            
+            <div class="d-flex flex-column gap-4">
+                {% for entrada in entradas %}
+                {# Convertimos la página genérica en una NoticiaPage real #}
+                {% with noticia=entrada.specific %}
+                <a href="{% pageurl noticia %}" class="text-decoration-none">
+                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100 p-3">
+                        <div class="row g-0 align-items-center">
+                            <div class="col-md-4">
+                                {% if noticia.imagen %}
+                                    {% image noticia.imagen fill-300x200 as img %}
+                                    <img src="{{ img.url }}" class="img-fluid rounded-3" alt="{{ noticia.title }}">
+                                {% endif %}
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body py-0">
+                                    <h5 class="fw-bold mb-1" style="color: #005941;">{{ noticia.title }}</h5>
+                                    <p class="text-muted small mb-0">{{ noticia.resumen|truncatechars:150 }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                {% endwith %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

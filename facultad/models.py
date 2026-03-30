@@ -85,11 +85,7 @@ class NoticiaPage(Page):
     )
     elementos_extra = StreamField([('p', blocks.CharBlock())], blank=True, null=True, use_json_field=True)
 
-    video_url = models.URLField(
-        blank=True, 
-        null=True, 
-        help_text="Pegá acá el link de YouTube (ej: https://www.youtube.com/watch?v=...) para que aparezca al final de la noticia."
-    )
+    video_url = models.URLField(blank=True, null=True, help_text="Link de YouTube")
     @property
     def video_embed_url(self):
         if self.video_url:
@@ -153,11 +149,9 @@ class FolpHomePage(Page):
 
     def get_context(self, request):
         context = super().get_context(request)
-        noticias = list(NoticiaPage.objects.live())
-        videos = list(VideoPage.objects.live())
-        
+        noticias = list(NoticiaPage.objects.live())        
         # Combinamos ambas listas y ordenamos
-        todo_el_contenido = sorted(noticias + videos, key=lambda x: x.prioridad)
+        todo_el_contenido = sorted(noticias, key=lambda x: x.prioridad)
         
         context['contenidos'] = todo_el_contenido
         return context
@@ -225,29 +219,18 @@ class CarreraPage(Page):
         context['notas_destacadas'] = NoticiaPage.objects.live().order_by('-fecha')[:2]
         return context
 
-class VideoPage(Page):
-    video_url = models.URLField(help_text="Pegá el link de YouTube")
-    prioridad = models.IntegerField(default=10)
-    ancho = models.CharField(
-        max_length=20, 
-        choices=[('col-md-4', 'Chica'), ('col-md-8', 'Mediana'), ('col-12', 'Grande')], 
-        default='col-md-4'
-    )
-
-    @property
-    def video_embed_url(self):
-        import re
-        if self.video_url:
-            match = re.search(r"(?:v=|\/)([0-9A-Za-z_-]{11}).*", self.video_url)
-            if match:
-                return f"https://www.youtube.com/embed/{match.group(1)}?rel=0"
-        return ""
+class NoticiasBlogPage(Page):
+    subtitulo = models.CharField(max_length=250, blank=True)
+    
+    # Solo permitimos que se creen NoticiaPage adentro de esta página
+    subpage_types = ['NoticiaPage']
 
     content_panels = Page.content_panels + [
-        FieldPanel('video_url'),
-        FieldPanel('prioridad'),
-        FieldPanel('ancho'),
+        FieldPanel('subtitulo'),
     ]
 
-    class Meta:
-        verbose_name = "Video para la Home"
+    def get_context(self, request):
+        context = super().get_context(request)
+        # Buscamos todas las páginas hijas que estén publicadas y las ordenamos
+        context['entradas'] = self.get_children().live().order_by('-first_published_at')
+        return context
