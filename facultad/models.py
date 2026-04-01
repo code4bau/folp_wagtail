@@ -1,13 +1,12 @@
 from django.db import models
-from wagtail.models import Page
+from wagtail.models import Page, Orderable
 from wagtail.fields import StreamField, RichTextField
 from wagtail import blocks
-from wagtail.admin.panels import FieldPanel, MultiFieldPanel
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel, InlinePanel, PageChooserPanel
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.models import register_snippet
-from wagtail.embeds.blocks import EmbedBlock
 from wagtail.documents.blocks import DocumentChooserBlock
-from wagtail.embeds.embeds import get_embed
+from modelcluster.fields import ParentalKey
 
 # --- 1. SNIPPETS ---
 
@@ -27,7 +26,7 @@ class Alerta(models.Model):
         return self.texto
 
 
-# --- 2. BLOQUES REUTILIZABLES (Deber ir antes de las clases Page) ---
+# --- 2. BLOQUES REUTILIZABLES (DEBEN IR ARRIBA DE LAS CLASES PAGE) ---
 
 class BotonPopUpBlock(blocks.StructBlock):
     texto_boton = blocks.CharBlock(required=True, label="Texto del Botón (ej: Ver Especialización)")
@@ -49,6 +48,26 @@ class MateriaBlock(blocks.StructBlock):
         icon = "form"
         label = "Materia"
 
+class TecnicaturaBloque(blocks.StructBlock):
+    titulo = blocks.CharBlock(required=True)
+    imagen = ImageChooserBlock(required=True)
+    
+    # Botón 1: Típico para Plan de Estudios
+    texto_boton_1 = blocks.CharBlock(required=False, default="Plan de Estudios")
+    doc_1 = DocumentChooserBlock(required=False)
+    
+    # Botón 2: Típico para Correlativas
+    texto_boton_2 = blocks.CharBlock(required=False, default="Correlativas")
+    doc_2 = DocumentChooserBlock(required=False)
+    
+    # Botón 3: Típico para Finales
+    texto_boton_3 = blocks.CharBlock(required=False, default="Finales y Reválidas")
+    doc_3 = DocumentChooserBlock(required=False)
+
+    class Meta:
+        template = "facultad/blocks/tecnicatura_block.html"
+        icon = "doc-full"
+
 
 # --- 3. PÁGINAS ---
 
@@ -63,19 +82,14 @@ class NoticiaPage(Page):
     )
     resumen = models.CharField(max_length=250)
     cuerpo = RichTextField(blank=True)
-
-
     prioridad = models.IntegerField(default=10)
     ancho = models.CharField(
         max_length=20, 
         choices=[('col-md-4', 'Chica'), ('col-md-8', 'Mediana'), ('col-12', 'Grande')], 
         default='col-md-4'
     )
-    
     mostrar_texto_en_home = models.BooleanField(default=True)
     convertir_en_popup = models.BooleanField(default=False)
-    link_externo = models.ForeignKey('wagtailcore.Page', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
-
     link_externo = models.ForeignKey(
         'wagtailcore.Page',
         null=True,
@@ -83,18 +97,15 @@ class NoticiaPage(Page):
         on_delete=models.SET_NULL,
         related_name='+',
     )
-    elementos_extra = StreamField([('p', blocks.CharBlock())], blank=True, null=True, use_json_field=True)
-
     video_url = models.URLField(blank=True, null=True, help_text="Link de YouTube")
+
     @property
     def video_embed_url(self):
         if self.video_url:
             import re
-            # Buscamos el ID del video en cualquier formato de link de YouTube
             match = re.search(r"(?:v=|\/)([0-9A-Za-z_-]{11}).*", self.video_url)
             if match:
                 video_id = match.group(1)
-                # Retornamos el link de embed con parámetros de seguridad
                 return f"https://www.youtube.com/embed/{video_id}?rel=0"
         return ""
     
@@ -118,7 +129,7 @@ class NoticiaPage(Page):
         FieldPanel('mostrar_texto_en_home'),
         FieldPanel('convertir_en_popup'),
         FieldPanel('boton_accion'),
-        FieldPanel('cuerpo'),          # Texto original recuperado
+        FieldPanel('cuerpo'),
         FieldPanel('link_externo'),
     ]
 
@@ -149,10 +160,8 @@ class FolpHomePage(Page):
 
     def get_context(self, request):
         context = super().get_context(request)
-        noticias = list(NoticiaPage.objects.live())        
-        # Combinamos ambas listas y ordenamos
+        noticias = list(NoticiaPage.objects.live().child_of(self))        
         todo_el_contenido = sorted(noticias, key=lambda x: x.prioridad)
-        
         context['contenidos'] = todo_el_contenido
         return context
 
@@ -169,18 +178,21 @@ class PaginaEstandar(Page):
         related_name='+'
     )
     video_url = models.URLField(blank=True, null=True, help_text="Link de YouTube")
+    
     @property
     def video_embed_url(self):
         if self.video_url:
             import re
-            # Buscamos el ID del video en cualquier formato de link de YouTube
             match = re.search(r"(?:v=|\/)([0-9A-Za-z_-]{11}).*", self.video_url)
             if match:
                 video_id = match.group(1)
-                # Retornamos el link de embed con parámetros de seguridad
                 return f"https://www.youtube.com/embed/{video_id}?rel=0"
         return ""
-    # Aplicamos la misma lógica para no romper nada
+
+    cuerpo_tecnicaturas = StreamField([
+        ('tecnicatura', TecnicaturaBloque()),
+    ], use_json_field=True, blank=True)
+    
     cuerpo = RichTextField(blank=True)
     boton_accion = StreamField([
         ('boton', blocks.StructBlock([
@@ -197,12 +209,12 @@ class PaginaEstandar(Page):
         FieldPanel('imagen_principal'),
         FieldPanel('cuerpo'),
         FieldPanel('video_url'),
+        FieldPanel('cuerpo_tecnicaturas'), # Agregado aquí para que se vea en el admin
         FieldPanel('boton_accion'),
     ]
 
 class CarreraPage(Page):
     titulo_carrera = models.CharField(max_length=255, default="Carrera Odontología")
-    
     plan_estudios = StreamField([
         ('titulo_anio', blocks.CharBlock(label="Título de Año")),
         ('subtitulo_periodo', blocks.CharBlock(label="Subtítulo de Periodo")),
@@ -219,18 +231,33 @@ class CarreraPage(Page):
         context['notas_destacadas'] = NoticiaPage.objects.live().order_by('-fecha')[:2]
         return context
 
+class BlogPageRelatedNews(Orderable):
+    page = ParentalKey('NoticiasBlogPage', related_name='related_news')
+    noticia = models.ForeignKey(
+        'NoticiaPage', 
+        on_delete=models.CASCADE, 
+        related_name='+'
+    )
+    panels = [PageChooserPanel('noticia')]
+
 class NoticiasBlogPage(Page):
     subtitulo = models.CharField(max_length=250, blank=True)
+    color_seccion = models.CharField(
+        max_length=20, 
+        choices=[('verde', 'Verde'), ('azul', 'Azul')], 
+        default='verde'
+    )
     
-    # Solo permitimos que se creen NoticiaPage adentro de esta página
-    subpage_types = ['NoticiaPage']
-
     content_panels = Page.content_panels + [
         FieldPanel('subtitulo'),
+        FieldPanel('color_seccion'),
+        InlinePanel('related_news', label="Migrar noticias de otras secciones"),
     ]
 
     def get_context(self, request):
         context = super().get_context(request)
-        # Buscamos todas las páginas hijas que estén publicadas y las ordenamos
-        context['entradas'] = self.get_children().live().order_by('-first_published_at')
+        hijas = list(self.get_children().live().specific())
+        migradas = [rel.noticia for rel in self.related_news.all()]
+        todas = sorted(hijas + migradas, key=lambda x: x.fecha, reverse=True)
+        context['entradas'] = todas
         return context

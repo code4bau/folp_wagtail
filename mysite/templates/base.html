@@ -74,7 +74,7 @@
                             <a class="nav-link" href="#">Estudiantiles</a>
                             <ul class="dropdown-custom shadow">
                                 <li><a href="{% slugurl 'estudiantiles' %}">Principal Estudiantiles</a></li>
-                                <li><a href="#">Noticias</a></li>
+                                <li><a href="{% slugurl 'notiest' %}">Noticias</a></li>
                                 <li><a href="{% slugurl 'asignaturas' %}">Informacion de Asignaturas</a></li>
                                 <li><a href="{% slugurl 'becas' %}">Becas</a></li>
                                 <li><a href="{% slugurl 'hclinica' %}">Historia Clinica y Material de Descarga</a></li>
@@ -86,10 +86,10 @@
                             <ul class="dropdown-custom shadow">
                                 <li><a href="{% slugurl 'academica' %}">Principal Academica</a></li>
                                 <li><a href="{% slugurl 'carrera' %}">Carrera Odontologia</a></li>
-                                <li><a href="#">Alumnos</a></li>
+                                <li><a href="{% slugurl 'alumnos' %}">Alumnos</a></li>
                                 <li><a href="{% slugurl 'biblioteca' %}">Biblioteca</a></li>
                                 <li><a href="{% slugurl 'homologacion' %}">Homologacion</a></li>
-                                <li><a href="#">Tecnicaturas Universitarias</a></li>
+                                <li><a href="{% slugurl 'tecuniversitarias' %}">Tecnicaturas Universitarias</a></li>
                             </ul>
                         </li>
 
@@ -142,10 +142,10 @@
                             <a class="nav-link" href="#">Gestión</a>
                             <ul class="dropdown-custom shadow">
                                 <li><a href="{% slugurl 'gestion' %}">Principal Gestion</a></li>
-                                <li><a href="#">Decanato</a></li>
+                                <li><a href="{% slugurl 'decanato' %}">Decanato</a></li>
                                 <li><a href="{% slugurl 'obrasp' %}">Obras y Planeamiento</a></li>
                                 <li><a href="{% slugurl 'coneau' %}">Acreditacion CONEAU</a></li>
-                                <li><a href="#">Noticias</a></li>
+                                <li><a href="{% slugurl 'notigestion' %}">Noticias</a></li>
                                 <li><a href="{% slugurl 'seguridadh' %}">Seguridad e Higiene</a></li>
                                 <li><a href="{% slugurl 'pliego' %}">Pliego de Compras</a></li>
                             </ul>
@@ -226,5 +226,31 @@
     <script type="text/javascript" src="{% static 'js/mysite.js' %}"></script>
     {% block extra_js %}{% endblock %}
 </body>
+<style>
+    /* Colores institucionales FOLP */
+.btn-dark-green {
+    background-color: #005941 !important;
+    color: white !important;
+    border: none;
+}
+
+.btn-light-green {
+    background-color: #28a745 !important;
+    color: white !important;
+    border: none;
+}
+
+.btn-gray {
+    background-color: #6c757d !important;
+    color: white !important;
+    border: none;
+}
+
+/* Para que no se pongan azules al pasar el mouse */
+.btn-dark-green:hover, .btn-light-green:hover, .btn-gray:hover {
+    filter: brightness(90%);
+    color: white !important;
+}
+</style>
 
 </html>

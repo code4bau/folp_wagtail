@@ -3,77 +3,93 @@
 
 {% block content %}
 <article>
-    {# Header de la página #}
+    {# --- 1. HEADER DE LA PÁGINA (Breadcrumbs y Título) --- #}
     <div class="py-5" style="background-color: #f8f9fa; border-bottom: 1px solid #dee2e6;">
         <div class="container">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-2">
-                    <li class="breadcrumb-item"><a href="/" style="color: #005941;">Inicio</a></li>
+                    <li class="breadcrumb-item"><a href="/" style="color: #005941; text-decoration: none;">Inicio</a></li>
                     <li class="breadcrumb-item active">{{ self.title }}</li>
                 </ol>
             </nav>
             <h1 class="display-4 fw-bold" style="color: #005941;">{{ self.title }}</h1>
             {% if self.subtitulo %}
-            <p class="lead text-muted">{{ self.subtitulo }}</p>
+                <p class="lead text-muted">{{ self.subtitulo }}</p>
             {% endif %}
         </div>
     </div>
 
     <div class="container my-5">
         <div class="row justify-content-center">
-            <div class="col-lg-9">
+            <div class="col-lg-10">
+                
+                {# --- 2. IMAGEN PRINCIPAL (Banner) --- #}
                 {% if self.imagen_principal %}
-                {% image self.imagen_principal fill-1200x500 as banner %}
-                <img src="{{ banner.url }}" class="img-fluid rounded-4 shadow-sm mb-5" alt="{{ self.title }}">
+                    {% image self.imagen_principal fill-1200x500 as banner %}
+                    <img src="{{ banner.url }}" class="img-fluid rounded-4 shadow-sm mb-5" alt="{{ self.title }}">
                 {% endif %}
 
-                <div class="contenido-estandar" style="font-size: 1.1rem; line-height: 1.8;">
+                {# --- 3. CUERPO DE TEXTO (RichText) --- #}
+                <div class="contenido-estandar mb-5" style="font-size: 1.1rem; line-height: 1.8;">
                     {{ self.cuerpo|richtext }}
                 </div>
+
+                {# --- 4. VIDEO DE YOUTUBE --- #}
                 {% if self.video_url %}
                 <div class="container-video-folp my-5">
                     <div class="ratio ratio-16x9 shadow-lg"
                         style="border-radius: 15px; overflow: hidden; border: 1px solid #eee;">
-                        <iframe src="{{ self.video_embed_url}}" title="Video" frameborder="0"
+                        <iframe src="{{ self.video_embed_url }}" title="Video" frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                             referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
                         </iframe>
                     </div>
                 </div>
                 {% endif %}
-            </div>
-        </div>
-        {% if self.boton_accion %}
-        <div class="mt-4 mb-5">
-            {% for block in self.boton_accion %}
-            {% with b=block.value %}
-            {# Lógica para decidir qué URL usar #}
-            {# Lógica: Si hay archivo de Wagtail, lo usamos. Si no, usamos la URL externa #}
-            <a href="{% if b.archivo %}{{ b.archivo.url }}{% else %}{{ b.url_externa }}{% endif %}"
-                class="btn-accion-folp" target="_blank" download>
 
-                {% if b.imagen_logo %}
-                {% image b.imagen_logo fill-25x25 as ico %}
-                <img src="{{ ico.url }}" class="me-2">
-                {% elif b.icono_fontawesome %}
-                <i class="fas {{ b.icono_fontawesome }} me-2"></i>
+                {# --- 5. BOTONES DE ACCIÓN (Descargas, links externos) --- #}
+                {% if self.boton_accion %}
+                <div class="d-flex flex-wrap gap-3 justify-content-start mb-5">
+                    {% for block in self.boton_accion %}
+                        {% with b=block.value %}
+                        <a href="{% if b.archivo %}{{ b.archivo.url }}{% else %}{{ b.url_externa }}{% endif %}"
+                            class="btn btn-outline-success rounded-pill px-4 py-2 fw-bold" target="_blank">
+                            {% if b.imagen_logo %}
+                                {% image b.imagen_logo fill-25x25 as ico %}
+                                <img src="{{ ico.url }}" class="me-2">
+                            {% elif b.icono_fontawesome %}
+                                <i class="fas {{ b.icono_fontawesome }} me-2"></i>
+                            {% endif %}
+                            <span>{{ b.texto }}</span>
+                        </a>
+                        {% endwith %}
+                    {% endfor %}
+                </div>
                 {% endif %}
 
-                <span>{{ b.texto }}</span>
-            </a>
-            {% endwith %}
-            {% endfor %}
+                {# --- 6. GRILLA DE TECNICATURAS (StreamField) --- #}
+                {% if self.cuerpo_tecnicaturas %}
+                <div class="row g-4 mt-2">
+                    {% for block in self.cuerpo_tecnicaturas %}
+                        <div class="col-md-6">
+                            {% include_block block %}
+                        </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+            </div>
         </div>
-        {% endif %}
+    </div>
 </article>
+
 <style>
-    /* Espaciado para los bloques del StreamField */
+    /* Estilos para el contenido de texto */
     .contenido-estandar p {
         margin-bottom: 1.6rem;
         color: #444;
     }
 
-    /* Estilo para los títulos que metas dentro del texto */
     .contenido-estandar h2,
     .contenido-estandar h3 {
         color: #005941;
@@ -82,32 +98,31 @@
         font-weight: 700;
     }
 
-    /* Para que los videos de YouTube no queden gigantes o desalineados */
-    .block-video {
-        position: relative;
-        padding-bottom: 56.25%;
-        /* Relación 16:9 */
-        height: 0;
-        overflow: hidden;
+    /* Ajustes para las imágenes dentro del texto */
+    .contenido-estandar img {
         border-radius: 12px;
-        margin: 3rem 0;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    }
-
-    .block-video iframe {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-    }
-
-    /* Imágenes dentro del cuerpo */
-    .block-imagen img {
-        border-radius: 8px;
-        margin: 2rem 0;
-        width: 100%;
+        max-width: 100%;
         height: auto;
+        margin: 2rem 0;
+    }
+
+    /* Botones de acción personalizados si no usás clases de Bootstrap */
+    .btn-accion-folp {
+        display: inline-flex;
+        align-items: center;
+        padding: 12px 25px;
+        background-color: #005941;
+        color: white;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 700;
+        transition: all 0.3s ease;
+    }
+
+    .btn-accion-folp:hover {
+        background-color: #00402e;
+        transform: translateY(-2px);
+        color: white;
     }
 </style>
 {% endblock %}

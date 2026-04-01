@@ -1,0 +1,44 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+
+<div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100 mb-4">
+    {# --- PARTE DE LA FOTO (Lo que te falta) --- #}
+    <div class="position-relative" style="height: 240px;">
+        {% if value.imagen %}
+            {% image value.imagen fill-800x500 as img %}
+            <img src="{{ img.url }}" class="w-100 h-100" style="object-fit: cover;" alt="{{ value.titulo }}">
+        {% else %}
+            <div class="w-100 h-100 bg-secondary d-flex align-items-center justify-content-center">
+                <span class="text-white">Sin imagen cargada</span>
+            </div>
+        {% endif %}
+        
+        {# Degradado para que el nombre de la tecnicatura se lea bien #}
+        <div class="position-absolute bottom-0 start-0 w-100 p-3" 
+             style="background: linear-gradient(transparent, rgba(0,0,0,0.85));">
+            <h4 class="text-white fw-bold mb-0">{{ value.titulo }}</h4>
+        </div>
+    </div>
+
+    {# --- PARTE DE LOS BOTONES (Lo que ya tenés) --- #}
+    <div class="card-body p-3">
+        <div class="d-grid gap-2">
+            {% if value.doc_1 %}
+                <a href="{{ value.doc_1.url }}" class="btn btn-dark-green fw-bold text-white py-2" target="_blank">
+                    {{ value.texto_boton_1|default:"Plan de Estudios" }}
+                </a>
+            {% endif %}
+
+            {% if value.doc_2 %}
+                <a href="{{ value.doc_2.url }}" class="btn btn-light-green fw-bold text-white py-2" target="_blank">
+                    {{ value.texto_boton_2|default:"Correlativas" }}
+                </a>
+            {% endif %}
+
+            {% if value.doc_3 %}
+                <a href="{{ value.doc_3.url }}" class="btn btn-gray fw-bold text-white py-2" target="_blank">
+                    {{ value.texto_boton_3|default:"Finales" }}
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
