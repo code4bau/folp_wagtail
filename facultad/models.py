@@ -43,26 +43,31 @@ class MateriaBlock(blocks.StructBlock):
     codigo = blocks.CharBlock(required=False, max_length=10, label="Código")
     nombre = blocks.CharBlock(required=True, label="Nombre de la materia")
     periodicidad = blocks.CharBlock(required=False, label="Periodicidad (Ej: 1er C.)")
+    
+    # El primer PDF (Parte 1 o Único)
+    documento = DocumentChooserBlock(required=False, label="PDF Parte 1 / Único")
+    
+    # El segundo PDF (Parte 2 - Opcional)
+    documento_2 = DocumentChooserBlock(required=False, label="PDF Parte 2 (Solo si tiene /)")
 
     class Meta:
         icon = "form"
         label = "Materia"
 
+class BotonTecnicaturaBlock(blocks.StructBlock):
+    texto = blocks.CharBlock(required=True, label="Texto del botón")
+    pagina = blocks.PageChooserBlock(required=False, label="Vincular a una Página")
+    documento = DocumentChooserBlock(required=False, label="Vincular a un PDF")
+    color = blocks.ChoiceBlock(choices=[
+        ('btn-dark-green', 'Verde Oscuro'),
+        ('btn-light-green', 'Verde Claro'),
+        ('btn-gray', 'Gris'),
+    ], default='btn-dark-green')
+
 class TecnicaturaBloque(blocks.StructBlock):
     titulo = blocks.CharBlock(required=True)
     imagen = ImageChooserBlock(required=True)
-    
-    # Botón 1: Típico para Plan de Estudios
-    texto_boton_1 = blocks.CharBlock(required=False, default="Plan de Estudios")
-    doc_1 = DocumentChooserBlock(required=False)
-    
-    # Botón 2: Típico para Correlativas
-    texto_boton_2 = blocks.CharBlock(required=False, default="Correlativas")
-    doc_2 = DocumentChooserBlock(required=False)
-    
-    # Botón 3: Típico para Finales
-    texto_boton_3 = blocks.CharBlock(required=False, default="Finales y Reválidas")
-    doc_3 = DocumentChooserBlock(required=False)
+    botones = blocks.ListBlock(BotonTecnicaturaBlock(), label="Botones de la tarjeta")
 
     class Meta:
         template = "facultad/blocks/tecnicatura_block.html"

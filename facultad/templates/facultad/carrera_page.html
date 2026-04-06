@@ -4,7 +4,7 @@
 {% block content %}
 <div class="container my-5">
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-10"> {# Lo agrandé un poco a 10 para que no quede tan apretado #}
             <h1 class="fw-bold mb-4" style="color: #005941; border-bottom: 2px solid #eee; padding-bottom: 15px;">
                 {{ page.titulo_carrera }}
             </h1>
@@ -12,45 +12,74 @@
             <div class="card border-0 shadow-sm" style="border-radius: 12px; overflow: hidden;">
                 <div class="table-responsive">
                     <table class="table mb-0">
+                        {# --- 1. ENCABEZADO REAL DE LA TABLA --- #}
                         <thead style="background-color: #f8f9fa;">
-                            <tr class="text-uppercase small fw-bold text-muted">
-                                <th class="ps-4 py-3">Código</th>
-                                <th class="py-3">Nombre de la Materia</th>
-                                <th class="py-3 text-end pe-4">Periodicidad</th>
+                            <tr class="small text-uppercase fw-bold text-muted">
+                                <td class="ps-4">Código</td>
+                                <td>Materia</td>
+                                <td>Periodicidad</td>
+                                <td class="text-center">Programa</td>
                             </tr>
                         </thead>
+
+                        {# --- 2. CUERPO DINÁMICO --- #}
                         <tbody>
                             {% for block in page.plan_estudios %}
-                            {% if block.block_type == 'titulo_anio' %} {# <--- ACÁ TAMBIÉN CAMBIÁ 'año' por 'anio' #}
-                                <tr class="bg-white">
-                                <td colspan="3" class="ps-4 py-4">
-                                    <h4 class="m-0 fw-bold text-success text-uppercase">
-                                        {{ block.value }}
-                                    </h4>
-                                </td>
-                                </tr>
+                                
+                                {# BLOQUE AÑO #}
+                                {% if block.block_type == 'titulo_anio' %}
+                                    <tr class="bg-light">
+                                        <td colspan="4" class="ps-4 py-3">
+                                            <h4 class="m-0 fw-bold text-success text-uppercase" style="font-size: 1.1rem;">
+                                                {{ block.value }}
+                                            </h4>
+                                        </td>
+                                    </tr>
+
+                                {# BLOQUE PERIODO #}
                                 {% elif block.block_type == 'subtitulo_periodo' %}
-                                <tr style="background-color: #fffaf4;">
-                                    <td colspan="3" class="ps-4 py-2">
-                                        <span class="small fw-bold text-uppercase"
-                                            style="color: #b37400; font-size: 0.75rem;">
-                                            {{ block.value }}
-                                        </span>
-                                    </td>
-                                </tr>
+                                    <tr style="background-color: #fffaf4;">
+                                        <td colspan="4" class="ps-4 py-2">
+                                            <span class="small fw-bold text-uppercase" style="color: #b37400; font-size: 0.75rem;">
+                                                {{ block.value }}
+                                            </span>
+                                        </td>
+                                    </tr>
+
+                                {# BLOQUE MATERIA (Corregido) #}
                                 {% elif block.block_type == 'materia' %}
-                                <tr class="align-middle">
-                                    <td class="ps-4 text-muted small">{{ block.value.codigo }}</td>
-                                    <td>
-                                        <a href="#" class="text-decoration-none fw-bold"
-                                            style="color: #1c705b; transition: 0.2s;">
-                                            {{ block.value.nombre }}
-                                        </a>
-                                    </td>
-                                    <td class="text-end pe-4 text-muted small">{{ block.value.periodicidad }}</td>
-                                </tr>
+                                    {% with m=block.value %}
+                                    <tr class="align-middle">
+                                        <td class="ps-4 text-muted small">{{ m.codigo }}</td>
+                                        <td>
+                                            {# Link dinámico en el nombre #}
+                                            <a href="{% if m.documento %}{{ m.documento.url }}{% else %}#{% endif %}" 
+                                               {% if m.documento %}target="_blank"{% endif %}
+                                               class="text-decoration-none fw-bold"
+                                               style="color: #1c705b; transition: 0.2s;">
+                                                {{ m.nombre }}
+                                            </a>
+                                        </td>
+                                        <td class="text-muted small">{{ m.periodicidad }}</td>
+                                        
+                                        {# Columna de Descargas con soporte para Parte 1 y 2 #}
+                                        <td class="text-center">
+                                            {% if m.documento %}
+                                                <a href="{{ m.documento.url }}" target="_blank" class="text-danger mx-1" title="Parte 1">
+                                                    <i class="fas fa-file-pdf fa-lg"></i>
+                                                </a>
+                                            {% endif %}
+                                            
+                                            {% if m.documento_2 %}
+                                                <a href="{{ m.documento_2.url }}" target="_blank" class="text-danger mx-1" title="Parte 2">
+                                                    <i class="fas fa-file-pdf fa-lg"></i>
+                                                </a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endwith %}
                                 {% endif %}
-                                {% endfor %}
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
@@ -60,13 +89,7 @@
 </div>
 
 <style>
-    /* Efecto hover en filas de materia */
-    tbody tr:hover {
-        background-color: #fdfdfd;
-    }
-
-    tbody tr a:hover {
-        color: #00bc8c !important;
-    }
+    tbody tr:hover { background-color: #fcfcfc; }
+    tbody tr a:hover { color: #00bc8c !important; text-decoration: underline !important; }
 </style>
 {% endblock %}
