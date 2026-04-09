@@ -6,7 +6,11 @@ from wagtail.admin.panels import FieldPanel, MultiFieldPanel, InlinePanel, PageC
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.models import register_snippet
 from wagtail.documents.blocks import DocumentChooserBlock
+from django import forms
 from modelcluster.fields import ParentalKey
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel, FieldRowPanel
+from wagtail.snippets.models import register_snippet
+from modelcluster.fields import ParentalManyToManyField
 
 # --- 1. SNIPPETS ---
 
@@ -25,6 +29,105 @@ class Alerta(models.Model):
     def __str__(self):
         return self.texto
 
+@register_snippet
+class CategoriaCurso(models.Model):
+    nombre = models.CharField(max_length=255)
+    slug = models.SlugField(unique=True, max_length=255)
+
+    panels = [FieldPanel('nombre'), FieldPanel('slug')]
+
+    def __str__(self):
+        return self.nombre
+
+    class Meta:
+        verbose_name = "Categoría de Curso"
+        verbose_name_plural = "Categorías de Cursos"
+
+# 2. Página del Curso (La "noticia")
+class CursoPage(Page):
+    # --- Datos de Cabecera (Izquierda) ---
+    imagen_afiche = models.ForeignKey(
+        'wagtailimages.Image', on_delete=models.SET_NULL, null=True, related_name='+'
+    )
+    descripcion_corta = models.TextField(blank=True, help_text="Se muestra en la card del índice")
+
+    # --- Datos de Cabecera (Derecha - Info Rápida con Íconos) ---
+    categorias = ParentalManyToManyField('facultad.CategoriaCurso', blank=True)
+    fecha_inicio = models.DateField(null=True, blank=True)
+    fecha_finalizacion = models.DateField(null=True, blank=True)
+    duracion = models.CharField(max_length=255, blank=True, help_text="Ej: 18 Sesiones")
+    horario = models.CharField(max_length=255, blank=True, help_text="Ej: De 9:00 a 16:00hs")
+
+    # --- Sección "Más Información" (Cuerpo) ---
+    requisitos = RichTextField(blank=True)
+    modalidad_detalle = RichTextField(blank=True)
+    forma_pago = RichTextField(blank=True)
+    cupo_disponible = models.CharField(max_length=255, blank=True)
+    docentes = RichTextField(blank=True)
+
+    # --- Sidebar de Datos (Derecha con Íconos) ---
+    modalidad_resumen = models.CharField(max_length=255, blank=True, help_text="Ej: Teórico con práctica clínica")
+    link_programa = models.URLField(blank=True, help_text="URL para descargar el PDF del programa")
+    arancel_socios = models.CharField(max_length=255, blank=True)
+    arancel_no_socios = models.CharField(max_length=255, blank=True)
+    matricula = models.CharField(max_length=255, blank=True)
+
+    # Organización de los paneles en el Admin (para que no sea una lista eterna)
+    content_panels = Page.content_panels + [
+        MultiFieldPanel([
+            FieldPanel('imagen_afiche'),
+            FieldPanel('descripcion_corta'),
+            FieldPanel('categorias', widget=forms.CheckboxSelectMultiple),
+        ], heading="Información Visual y Categorías"),
+
+        MultiFieldPanel([
+            FieldRowPanel([
+                FieldPanel('fecha_inicio'),
+                FieldPanel('fecha_finalizacion'),
+            ]),
+            FieldPanel('duracion'),
+            FieldPanel('horario'),
+        ], heading="Datos de Cabecera (Info Rápida)"),
+
+        MultiFieldPanel([
+            FieldPanel('requisitos'),
+            FieldPanel('modalidad_detalle'),
+            FieldPanel('forma_pago'),
+            FieldPanel('cupo_disponible'),
+            FieldPanel('docentes'),
+        ], heading="Cuerpo: Más Información (RichText)"),
+
+        MultiFieldPanel([
+            FieldPanel('modalidad_resumen'),
+            FieldPanel('link_programa'),
+            FieldPanel('arancel_socios'),
+            FieldPanel('arancel_no_socios'),
+            FieldPanel('matricula'),
+        ], heading="Sidebar de Datos Técnicos"),
+    ]
+
+# 3. Índice de Cursos (La que tiene el buscador y filtros)
+class CursoIndexPage(Page):
+    intro = models.TextField(blank=True)
+
+    def get_context(self, request):
+        context = super().get_context(request)
+        # Obtenemos todos los cursos hijos
+        cursos = CursoPage.objects.live().public().child_of(self).order_by('-first_published_at')
+        
+        # Filtro por Categoría
+        cat_slug = request.GET.get('categoria')
+        if cat_slug:
+            cursos = cursos.filter(categorias__slug=cat_slug)
+            
+        # Filtro por Buscador
+        search_query = request.GET.get('query')
+        if search_query:
+            cursos = cursos.filter(title__icontains=search_query)
+
+        context['cursos'] = cursos
+        context['categorias'] = CategoriaCurso.objects.all()
+        return context
 
 # --- 2. BLOQUES REUTILIZABLES (DEBEN IR ARRIBA DE LAS CLASES PAGE) ---
 

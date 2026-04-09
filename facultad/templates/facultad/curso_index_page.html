@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{# IMPORTANTE: Estas dos líneas deben estar arriba de todo #}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+<div class="container my-5">
+    <h1 class="fw-bold mb-4" style="color: #005941;">Cursos de Posgrado</h1>
+
+    <div class="row">
+        <aside class="col-lg-3 mb-4">
+            <div class="card border-0 shadow-sm p-3 sticky-top" style="top: 20px;">
+                <h5 class="fw-bold mb-3">Categorías</h5>
+                <form action="." method="get" id="filter-form">
+                    {% for cat in categorias %}
+                    <div class="form-check mb-2">
+                        {# Corregido el espacio en el if de abajo #}
+                        <input class="form-check-input" type="radio" name="categoria" 
+                               value="{{ cat.slug }}" id="cat-{{ cat.id }}"
+                               {% if request.GET.categoria == cat.slug %}checked{% endif %}
+                               onchange="this.form.submit()">
+                        <label class="form-check-label small fw-bold" for="cat-{{ cat.id }}">
+                            {{ cat.nombre }}
+                        </label>
+                    </div>
+                    {% endfor %}
+                    <a href="." class="btn btn-sm btn-outline-secondary mt-3 w-100">Limpiar Filtros</a>
+                </form>
+
+                <h5 class="fw-bold mt-4 mb-3">Fecha de Inicio</h5>
+                <div class="d-flex gap-2 mb-3">
+                    <input type="text" class="form-control form-control-sm" placeholder="Desde">
+                    <input type="text" class="form-control form-control-sm" placeholder="Hasta">
+                </div>
+                <button class="btn btn-dark-green w-100 fw-bold">FILTRAR</button>
+            </div>
+        </aside>
+
+        <main class="col-lg-9">
+            <form action="." method="get" class="mb-4">
+                <div class="input-group shadow-sm">
+                    <input type="text" name="query" class="form-control border-0 py-3" 
+                           placeholder="Buscar cursos..." value="{{ request.GET.query }}">
+                    <button class="btn btn-dark-green px-4" type="submit">
+                        <i class="fas fa-search me-2"></i> BUSCAR
+                    </button>
+                </div>
+            </form>
+
+            <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+                {% for curso in cursos %}
+                <div class="col">
+                    <div class="card h-100 border-0 shadow-sm card-curso">
+                        {# TAG CORREGIDO: image en minúscula #}
+                        {% if curso.imagen_afiche %}
+                            {% image curso.imagen_afiche fill-600x400 as img %}
+                            <img src="{{ img.url }}" class="card-img-top" alt="{{ curso.title }}" style="object-fit: cover; height: 200px;">
+                        {% else %}
+                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                <i class="fas fa-image fa-2x text-muted"></i>
+                            </div>
+                        {% endif %}
+                        
+                        <div class="card-body d-flex flex-column">
+                            <div class="mb-2">
+                                {% for cat in curso.categorias.all %}
+                                    <span class="badge bg-dark-green text-uppercase px-2 py-1" style="font-size: 0.6rem;">
+                                        {{ cat.nombre }}
+                                    </span>
+                                {% endfor %}
+                            </div>
+                            <h5 class="card-title fw-bold fs-6" style="color: #1c705b;">{{ curso.title }}</h5>
+                            <p class="card-text text-muted small flex-grow-1">
+                                {{ curso.descripcion_corta|truncatechars:70 }}
+                            </p>
+                            <div class="mt-3">
+                                <a href="{% pageurl curso %}" class="btn btn-dark-green btn-sm w-100 fw-bold">Ver Curso</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center py-5">
+                    <p class="text-muted">No se encontraron cursos con esos criterios.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </main>
+    </div>
+</div>
+
+<style>
+    .bg-dark-green, .btn-dark-green { background-color: #005941 !important; color: white !important; }
+    .card-curso { transition: transform 0.2s; border-radius: 12px; overflow: hidden; }
+    .card-curso:hover { transform: translateY(-5px); }
+</style>
+{% endblock %}
