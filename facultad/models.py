@@ -121,9 +121,18 @@ class CursoIndexPage(Page):
             cursos = cursos.filter(categorias__slug=cat_slug)
             
         # Filtro por Buscador
+       # Dentro del método get_context de CursoIndexPage
         search_query = request.GET.get('query')
+        query_string = request.GET.get('query', None)
         if search_query:
-            cursos = cursos.filter(title__icontains=search_query)
+    # Quitamos espacios extra al principio y al final
+         search_query = search_query.strip()
+    # Buscamos en el título O en la descripción corta
+        if query_string:
+         cursos = cursos.filter(
+         models.Q(title__icontains=query_string) | 
+         models.Q(descripcion_corta__icontains=query_string)
+    ).distinct()
 
         context['cursos'] = cursos
         context['categorias'] = CategoriaCurso.objects.all()

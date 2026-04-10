@@ -8,25 +8,25 @@
             <div class="row g-5 align-items-center mb-5">
                 <div class="col-md-5">
                     {% if page.imagen_afiche %}
-                        {# fill-600x800 para formato afiche vertical #}
-                        {% image page.imagen_afiche fill-600x800 as img %}
-                        <img src="{{ img.url }}" class="img-fluid rounded-3 shadow-sm" alt="{{ page.title }}">
+                    {# fill-600x800 para formato afiche vertical #}
+                    {% image page.imagen_afiche fill-600x800 as img %}
+                    <img src="{{ img.url }}" class="img-fluid rounded-3 shadow-sm" alt="{{ page.title }}">
                     {% else %}
-                        <div class="p-5 text-center text-muted bg-light rounded-3">Sin imagen de afiche</div>
+                    <div class="p-5 text-center text-muted bg-light rounded-3">Sin imagen de afiche</div>
                     {% endif %}
                 </div>
 
                 <div class="col-md-7">
                     <div class="mb-3">
                         {% for cat in page.categorias.all %}
-                            <span class="badge bg-folp-green text-uppercase px-2 py-1" style="font-size: 0.7rem;">
-                                {{ cat.nombre }}
-                            </span>
+                        <span class="badge bg-folp-green text-uppercase px-2 py-1" style="font-size: 0.7rem;">
+                            {{ cat.nombre }}
+                        </span>
                         {% endfor %}
                     </div>
 
                     <h1 class="fw-bold mb-4 display-6" style="color: #005941;">{{ page.title }}</h1>
-                    
+
                     <div class="fs-6 text-secondary mb-5">
                         {{ page.descripcion_corta|linebreaks }}
                     </div>
@@ -41,7 +41,7 @@
                             </div>
                         </div>
                         {% endif %}
-                        
+
                         {% if page.duracion %}
                         <div class="col-sm-6 d-flex align-items-center">
                             <i class="fas fa-history fa-2x me-3"></i>
@@ -56,20 +56,23 @@
             </div>
 
             <h3 class="fw-bold mb-4" style="color: #1c705b;">Más información</h3>
-            
+
             <div class="row g-5">
                 <div class="col-lg-8">
-                    <div class="accordion accordion-flush shadow-sm rounded-3 overflow-hidden border" id="accordionDetalles">
-                        
+                    <div class="accordion accordion-flush shadow-sm rounded-3 overflow-hidden border"
+                        id="accordionDetalles">
+
                         {# Requisitos (Cambiado a collapsed) #}
                         {% if page.requisitos %}
                         <div class="accordion-item">
                             <h2 class="accordion-header">
-                                <button class="accordion-button collapsed fw-bold text-folp-green" type="button" data-bs-toggle="collapse" data-bs-target="#collapseReq">
+                                <button class="accordion-button collapsed fw-bold text-folp-green" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#collapseReq">
                                     Requisitos
-                                1</button>
+                                    1</button>
                             </h2>
-                            <div id="collapseReq" class="accordion-collapse collapse" data-bs-parent="#accordionDetalles">
+                            <div id="collapseReq" class="accordion-collapse collapse"
+                                data-bs-parent="#accordionDetalles">
                                 <div class="accordion-body richtext-folp small text-secondary">
                                     {{ page.requisitos|richtext }}
                                 </div>
@@ -81,11 +84,13 @@
                         {% if page.modalidad_detalle %}
                         <div class="accordion-item">
                             <h2 class="accordion-header">
-                                <button class="accordion-button collapsed fw-bold text-folp-green" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMod">
+                                <button class="accordion-button collapsed fw-bold text-folp-green" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#collapseMod">
                                     Modalidad
                                 </button>
                             </h2>
-                            <div id="collapseMod" class="accordion-collapse collapse" data-bs-parent="#accordionDetalles">
+                            <div id="collapseMod" class="accordion-collapse collapse"
+                                data-bs-parent="#accordionDetalles">
                                 <div class="accordion-body richtext-folp small text-secondary">
                                     {{ page.modalidad_detalle|richtext }}
                                 </div>
@@ -97,11 +102,13 @@
                         {% if page.docentes %}
                         <div class="accordion-item">
                             <h2 class="accordion-header">
-                                <button class="accordion-button collapsed fw-bold text-folp-green" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDoc">
+                                <button class="accordion-button collapsed fw-bold text-folp-green" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#collapseDoc">
                                     Docentes
                                 </button>
                             </h2>
-                            <div id="collapseDoc" class="accordion-collapse collapse" data-bs-parent="#accordionDetalles">
+                            <div id="collapseDoc" class="accordion-collapse collapse"
+                                data-bs-parent="#accordionDetalles">
                                 <div class="accordion-body richtext-folp small text-secondary">
                                     {{ page.docentes|richtext }}
                                 </div>
@@ -113,7 +120,7 @@
 
                 <aside class="col-lg-4">
                     <div class="bg-light p-4 rounded-4 border shadow-sm sidebar-datos">
-                        
+
                         {# Modalidad Resumen #}
                         {% if page.modalidad_resumen %}
                         <div class="d-flex align-items-start mb-4">
@@ -126,7 +133,8 @@
                         {% if page.link_programa %}
                         <div class="d-flex align-items-center mb-5">
                             <i class="fas fa-file-pdf text-danger fa-lg me-3"></i>
-                            <a href="{{ page.link_programa }}" target="_blank" class="fw-bold text-dark text-decoration-none hover-underline">
+                            <a href="{{ page.link_programa }}" target="_blank"
+                                class="fw-bold text-dark text-decoration-none hover-underline">
                                 Descargar Programa
                             </a>
                         </div>
@@ -150,34 +158,264 @@
                             </div>
                             {% endif %}
                         </div>
-                        
+
                         <p class="text-muted small mt-4 pt-3 border-top">
-                            <i class="fas fa-info-circle me-1"></i> Para inscripciones, contactar a Secretaría de Posgrado.
+                            <i class="fas fa-info-circle me-1"></i> Para inscripciones, contactar a Secretaría de
+                            Posgrado.
                         </p>
                     </div>
                 </aside>
             </div>
         </div>
     </div>
-</article>
+    <section class="mt-5 pt-5 border-top">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <h2 class="fw-bold mb-4" style="color: #005941;">Preinscripción al curso</h2>
+                <p class="text-secondary mb-5">
+                    Completá el siguiente formulario para reservar tu lugar. Te responderemos a la brevedad.
+                </p>
 
+                <div class="stepper-wrapper mb-5">
+                    <div class="stepper-item active" id="step-1-indicator">
+                        <div class="step-counter">1</div>
+                        <div class="step-name">Información Personal</div>
+                    </div>
+                    <div class="stepper-item" id="step-2-indicator">
+                        <div class="step-counter">2</div>
+                        <div class="step-name">Información del Pago</div>
+                    </div>
+                </div>
+
+                <form id="preinscripcion-form" class="bg-white p-4 p-md-5 rounded-4 shadow-sm border">
+
+                    <div id="step-1">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Nombre *</label>
+                                <input type="text" class="form-control py-2" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Apellido *</label>
+                                <input type="text" class="form-control py-2" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">Correo Electrónico *</label>
+                                <input type="email" class="form-control py-2" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">Teléfono *</label>
+                                <input type="tel" class="form-control py-2" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">DNI *</label>
+                                <input type="text" class="form-control py-2" required>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label fw-bold">Matrícula / Legajo *</label>
+                                <input type="text" class="form-control py-2"
+                                    placeholder="Ingresá tu matrícula profesional o legajo UNLP" required>
+                            </div>
+                        </div>
+                        <div class="mt-5">
+                            <button type="button" class="btn btn-folp-blue px-5 fw-bold"
+                                onclick="nextStep(2)">SIGUIENTE</button>
+                        </div>
+                    </div>
+
+                    <div id="step-2" style="display: none;">
+                        <div class="alert alert-info border-0 rounded-3 mb-4">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Para confirmar la inscripción, deberás realizar la transferencia y adjuntar el comprobante
+                            aquí.
+                        </div>
+
+                        <div class="row g-4">
+                            <div class="col-12 mb-3">
+                                <label class="form-label fw-bold">Adjuntar Comprobante de Pago (PDF/JPG) *</label>
+                                <input type="file" class="form-control py-2" required>
+                            </div>
+
+                            <div class="col-12 border-top pt-4">
+                                <label class="form-label fw-bold d-block mb-3">¿Presenta Trabajo/s?</label>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="presenta_trabajo" id="trabajo_si"
+                                        value="si" onclick="toggleTrabajo(true)">
+                                    <label class="form-check-label" for="trabajo_si">Sí</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="presenta_trabajo" id="trabajo_no"
+                                        value="no" onclick="toggleTrabajo(false)" checked>
+                                    <label class="form-check-label" for="trabajo_no">No</label>
+                                </div>
+                            </div>
+
+                            <div class="col-12 mt-3" id="campo-pdf-trabajo" style="display: none;">
+                                <label class="form-label fw-bold text-success">Adjuntar Trabajo (PDF) *</label>
+                                <input type="file" class="form-control py-2 border-success" id="input-pdf-trabajo">
+                            </div>
+                        </div>
+
+                        <div class="mt-5 d-flex gap-3">
+                            <button type="button" class="btn btn-outline-secondary px-4 fw-bold"
+                                onclick="nextStep(1)">ATRÁS</button>
+                            <button type="submit" class="btn btn-folp-green px-5 fw-bold text-white">COMPLETAR
+                                PREINSCRIPCIÓN</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</article>
+<script>
+    function nextStep(step) {
+        if (step === 2) {
+            document.getElementById('step-1').style.display = 'none';
+            document.getElementById('step-2').style.display = 'block';
+            document.getElementById('step-2-indicator').classList.add('active');
+            document.getElementById('step-1-indicator').classList.remove('active');
+        } else {
+            document.getElementById('step-2').style.display = 'none';
+            document.getElementById('step-1').style.display = 'block';
+            document.getElementById('step-1-indicator').classList.add('active');
+            document.getElementById('step-2-indicator').classList.remove('active');
+        }
+        // Hace scroll suave hasta el inicio del formulario
+        document.getElementById('preinscripcion-form').scrollIntoView({ behavior: 'smooth' });
+    }
+    function toggleTrabajo(mostrar) {
+        const contenedor = document.getElementById('campo-pdf-trabajo');
+        const input = document.getElementById('input-pdf-trabajo');
+
+        if (mostrar) {
+            contenedor.style.display = 'block';
+            input.setAttribute('required', 'required'); // Se vuelve obligatorio si dice "Sí"
+        } else {
+            contenedor.style.display = 'none';
+            input.removeAttribute('required'); // Deja de ser obligatorio si dice "No"
+        }
+    }
+</script>
 <style>
     /* Colores FOLP */
-    .bg-folp-green { background-color: #005941 !important; color: white !important; }
-    .text-folp-green { color: #005941 !important; }
-    .text-folp-light-green { color: #1c705b !important; }
-    
+    .bg-folp-green {
+        background-color: #005941 !important;
+        color: white !important;
+    }
+
+    .text-folp-green {
+        color: #005941 !important;
+    }
+
+    .text-folp-light-green {
+        color: #1c705b !important;
+    }
+
     /* Ajustes Acordeón */
-    .accordion-button:not(.collapsed) { background-color: #e6eeeb; color: #005941; }
-    .accordion-button::after { background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23005941'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e"); }
+    .accordion-button:not(.collapsed) {
+        background-color: #e6eeeb;
+        color: #005941;
+    }
+
+    .accordion-button::after {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23005941'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    }
 
     /* Estilos RichText FOLP (Listas en verde) */
-    .richtext-folp ul { list-style: none; padding-left: 0; }
-    .richtext-folp ul li { position: relative; padding-left: 25px; margin-bottom: 8px; }
-    .richtext-folp ul li::before {
-        content: "\f00c"; font-family: "Font Awesome 6 Free"; font-weight: 900;
-        position: absolute; left: 0; color: #1c705b;
+    .richtext-folp ul {
+        list-style: none;
+        padding-left: 0;
     }
-    .hover-underline:hover { text-decoration: underline !important; }
+
+    .richtext-folp ul li {
+        position: relative;
+        padding-left: 25px;
+        margin-bottom: 8px;
+    }
+
+    .richtext-folp ul li::before {
+        content: "\f00c";
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        position: absolute;
+        left: 0;
+        color: #1c705b;
+    }
+
+    .hover-underline:hover {
+        text-decoration: underline !important;
+    }
+
+    /* Estilos del Formulario por Pasos */
+    .btn-folp-blue {
+        background-color: #1c705b;
+        color: white;
+    }
+
+    .btn-folp-blue:hover {
+        background-color: #005941;
+        color: white;
+    }
+
+    .stepper-wrapper {
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .stepper-wrapper::before {
+        content: '';
+        position: absolute;
+        top: 25px;
+        left: 5%;
+        right: 5%;
+        height: 2px;
+        background-color: #dee2e6;
+        z-index: 1;
+    }
+
+    .stepper-item {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        z-index: 2;
+        background-color: white;
+        padding: 0 20px;
+    }
+
+    .step-counter {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: white;
+        border: 2px solid #dee2e6;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #adb5bd;
+    }
+
+    .stepper-item.active .step-counter {
+        border-color: #00bcd4;
+        /* Azul de tu captura */
+        color: #00bcd4;
+    }
+
+    .step-name {
+        font-size: 14px;
+        color: #6c757d;
+        font-weight: 500;
+    }
+
+    .stepper-item.active .step-name {
+        color: #1c705b;
+        font-weight: bold;
+    }
 </style>
 {% endblock %}

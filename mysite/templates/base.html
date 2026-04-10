@@ -131,6 +131,7 @@
                                 <li><a href="{% slugurl 'politicas' %}">Politicas Sociales</a></li>
                                 <li><a href="{% slugurl 'voluntariado' %}">Voluntariado</a></li>
                                 <li><a href="{% slugurl 'entornos' %}">Revista Entornos</a></li>
+                                <li><a href="{% slugurl 'revista-el-lado-b-de-la-operatoria-dental-22262' %}">El Lado B de la Operatoria Dental</a></li>
                             </ul>
                         </li>
 
@@ -321,6 +322,22 @@
             visibility: visible;
             opacity: 1;
         }
+    }
+    /* Forzamos que el header y sus menús siempre estén por encima de todo */
+    .header-unlp {
+        position: relative;
+        z-index: 1050 !important; /* Valor superior al de los elementos de la página */
+    }
+
+    /* Nos aseguramos de que el contenedor de filtros no tenga un z-index alto */
+    aside.col-lg-3 {
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Si el buscador o los filtros tienen 'sticky-top', bajamos su prioridad */
+    .sticky-top {
+        z-index: 1020 !important; 
     }
 </style>
 
