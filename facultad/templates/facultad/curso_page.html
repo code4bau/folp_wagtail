@@ -118,7 +118,7 @@
                     </div>
                 </div>
 
-                <aside class="col-lg-4">
+                <!--    <aside class="col-lg-4">
                     <div class="bg-light p-4 rounded-4 border shadow-sm sidebar-datos">
 
                         {# Modalidad Resumen #}
@@ -164,7 +164,7 @@
                             Posgrado.
                         </p>
                     </div>
-                </aside>
+                </aside> -->
             </div>
         </div>
     </div>
@@ -183,84 +183,71 @@
                     </div>
                     <div class="stepper-item" id="step-2-indicator">
                         <div class="step-counter">2</div>
-                        <div class="step-name">Información del Pago</div>
+                        <div class="step-name">Comprobante de Pago</div>
                     </div>
                 </div>
 
-                <form id="preinscripcion-form" class="bg-white p-4 p-md-5 rounded-4 shadow-sm border">
+                {% if form.errors %}
+                <div class="alert alert-danger">
+                    <strong>Error en el formulario:</strong>
+                    {{ form.errors }}
+                </div>
+                {% endif %}
+
+                <form action="{% pageurl page %}" method="POST" enctype="multipart/form-data" id="preinscripcion-form"
+                    class="bg-white p-4 p-md-5 rounded-4 shadow-sm border">
+                    {% csrf_token %}
 
                     <div id="step-1">
-                        <div class="row g-4">
+                        <div class="row g-3">
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">Nombre *</label>
-                                <input type="text" class="form-control py-2" required>
+                                <label class="form-label small fw-bold">Nombre *</label>
+                                <input type="text" name="nombres" class="form-control py-2">
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">Apellido *</label>
-                                <input type="text" class="form-control py-2" required>
+                                <label class="form-label small fw-bold">Apellido *</label>
+                                <input type="text" name="apellidos" class="form-control py-2">
                             </div>
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">Correo Electrónico *</label>
-                                <input type="email" class="form-control py-2" required>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">DNI *</label>
+                                <input type="text" name="dni" id="id_dni" class="form-control py-2">
                             </div>
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">Teléfono *</label>
-                                <input type="tel" class="form-control py-2" required>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">DNI *</label>
-                                <input type="text" class="form-control py-2" required>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Teléfono *</label>
+                                <input type="tel" name="telefono" class="form-control py-2" required>
                             </div>
                             <div class="col-md-12">
-                                <label class="form-label fw-bold">Matrícula / Legajo *</label>
-                                <input type="text" class="form-control py-2"
-                                    placeholder="Ingresá tu matrícula profesional o legajo UNLP" required>
+                                <label class="form-label small fw-bold">Correo Electrónico *</label>
+                                <input type="email" name="email" class="form-control py-2" required>
                             </div>
                         </div>
-                        <div class="mt-5">
-                            <button type="button" class="btn btn-folp-blue px-5 fw-bold"
+                        <div class="mt-4 text-end">
+                            <button type="button" class="btn btn-folp-blue px-4 fw-bold"
                                 onclick="nextStep(2)">SIGUIENTE</button>
                         </div>
                     </div>
 
                     <div id="step-2" style="display: none;">
-                        <div class="alert alert-info border-0 rounded-3 mb-4">
-                            <i class="fas fa-info-circle me-2"></i>
-                            Para confirmar la inscripción, deberás realizar la transferencia y adjuntar el comprobante
-                            aquí.
+                        <div class="alert alert-info border-0 rounded-3 mb-4 py-3">
+                            <i class="fas fa-info-circle me-2" style="color: #005941;"></i>
+                            Adjuntá el comprobante de transferencia para validar tu preinscripción.
                         </div>
 
-                        <div class="row g-4">
-                            <div class="col-12 mb-3">
-                                <label class="form-label fw-bold">Adjuntar Comprobante de Pago (PDF/JPG) *</label>
-                                <input type="file" class="form-control py-2" required>
-                            </div>
-
-                            <div class="col-12 border-top pt-4">
-                                <label class="form-label fw-bold d-block mb-3">¿Presenta Trabajo/s?</label>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="presenta_trabajo" id="trabajo_si"
-                                        value="si" onclick="toggleTrabajo(true)">
-                                    <label class="form-check-label" for="trabajo_si">Sí</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="presenta_trabajo" id="trabajo_no"
-                                        value="no" onclick="toggleTrabajo(false)" checked>
-                                    <label class="form-check-label" for="trabajo_no">No</label>
-                                </div>
-                            </div>
-
-                            <div class="col-12 mt-3" id="campo-pdf-trabajo" style="display: none;">
-                                <label class="form-label fw-bold text-success">Adjuntar Trabajo (PDF) *</label>
-                                <input type="file" class="form-control py-2 border-success" id="input-pdf-trabajo">
-                            </div>
+                        <div class="mb-5">
+                            <label class="form-label small fw-bold mb-2">Adjuntar Comprobante de Pago (PDF/JPG)
+                                *</label>
+                            <input type="file" name="comprobante" class="form-control form-control-lg border-2"
+                                required>
+                            <div class="form-text mt-2">Tamaño máximo: 5MB. Formatos: JPG, PNG, PDF.</div>
                         </div>
 
-                        <div class="mt-5 d-flex gap-3">
-                            <button type="button" class="btn btn-outline-secondary px-4 fw-bold"
-                                onclick="nextStep(1)">ATRÁS</button>
-                            <button type="submit" class="btn btn-folp-green px-5 fw-bold text-white">COMPLETAR
-                                PREINSCRIPCIÓN</button>
+                        <div class="d-flex justify-content-between align-items-center pt-4 border-top">
+                            <button type="button" class="btn btn-outline-secondary px-4 fw-bold" onclick="nextStep(1)">
+                                <i class="fas fa-arrow-left me-2"></i> ATRÁS
+                            </button>
+                            <button type="submit" class="btn btn-success btn-lg px-5 text-white fw-bold shadow">
+                                TERMINAR PREINSCRIPCIÓN <i class="fas fa-check-circle ms-2"></i>
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -270,7 +257,17 @@
 </article>
 <script>
     function nextStep(step) {
+        // Validación básica antes de pasar al paso 2
         if (step === 2) {
+            // Usamos los nuevos nombres plurales
+            const nombre = document.querySelector('input[name="nombres"]').value;
+            const apellido = document.querySelector('input[name="apellidos"]').value;
+            const dni = document.querySelector('input[name="dni"]').value;
+
+            if (!nombre || !apellido || !dni) {
+                alert("Por favor, completá los campos obligatorios del Paso 1");
+                return;
+            }
             document.getElementById('step-1').style.display = 'none';
             document.getElementById('step-2').style.display = 'block';
             document.getElementById('step-2-indicator').classList.add('active');
@@ -281,9 +278,16 @@
             document.getElementById('step-1-indicator').classList.add('active');
             document.getElementById('step-2-indicator').classList.remove('active');
         }
-        // Hace scroll suave hasta el inicio del formulario
-        document.getElementById('preinscripcion-form').scrollIntoView({ behavior: 'smooth' });
     }
+
+    // Forzamos el envío del formulario al hacer clic en el último botón
+    document.getElementById('preinscripcion-form').onsubmit = function (e) {
+        const comprobante = document.querySelector('input[name="comprobante"]');
+        if (comprobante.files.length === 0) {
+            alert("Debes adjuntar el comprobante de pago");
+            e.preventDefault(); // Evita el envío si no hay archivo
+        }
+    };
     function toggleTrabajo(mostrar) {
         const contenedor = document.getElementById('campo-pdf-trabajo');
         const input = document.getElementById('input-pdf-trabajo');

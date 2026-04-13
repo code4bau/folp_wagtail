@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+<main class="container my-5">
+    <h1 class="text-center fw-bold mb-5">{{ page.title }}</h1>
+
+    <div class="row justify-content-center">
+        {% for evento in eventos %}
+            <div class="col-md-5 mb-4">
+                <div class="card h-100 shadow-sm border-0 hover-zoom">
+                    <a href="{% pageurl evento %}" class="text-decoration-none">
+                        {% if evento.imagen_afiche %}
+                            {% image evento.imagen_afiche fill-800x450 as img %}
+                            <img src="{{ img.url }}" alt="{{ evento.title }}" class="card-img-top rounded">
+                        {% else %}
+                            <div class="bg-secondary text-white d-flex align-items-center justify-content-center rounded" style="height: 250px;">
+                                <span>Sin imagen configurada</span>
+                            </div>
+                        {% endif %}
+                        
+                        <div class="card-body text-center">
+                            <h3 class="h5 text-dark fw-bold mt-2">{{ evento.title|upper }}</h3>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</main>
+
+<style>
+    .hover-zoom {
+        transition: transform 0.3s ease;
+    }
+    .hover-zoom:hover {
+        transform: scale(1.03);
+    }
+</style>
+{% endblock %}

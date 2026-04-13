@@ -2,15 +2,18 @@ from django.db import models
 from wagtail.models import Page, Orderable
 from wagtail.fields import StreamField, RichTextField
 from wagtail import blocks
-from wagtail.admin.panels import FieldPanel, MultiFieldPanel, InlinePanel, PageChooserPanel
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel, InlinePanel, ObjectList, PageChooserPanel, TabbedInterface, FieldRowPanel, TabbedInterface
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.models import register_snippet
 from wagtail.documents.blocks import DocumentChooserBlock
 from django import forms
 from modelcluster.fields import ParentalKey
-from wagtail.admin.panels import FieldPanel, MultiFieldPanel, FieldRowPanel
 from wagtail.snippets.models import register_snippet
 from modelcluster.fields import ParentalManyToManyField
+from wagtail.contrib.forms.models import AbstractEmailForm, AbstractForm, AbstractFormField, DjangoJSONEncoder
+from wagtail.contrib.forms.forms import WagtailAdminFormPageForm
+from wagtail.contrib.forms.panels import FormSubmissionsPanel
+import json
 
 # --- 1. SNIPPETS ---
 
@@ -43,13 +46,23 @@ class CategoriaCurso(models.Model):
         verbose_name = "Categoría de Curso"
         verbose_name_plural = "Categorías de Cursos"
 
-# 2. Página del Curso (La "noticia")
-class CursoPage(Page):
+class CursoFormField(AbstractFormField):
+    page = ParentalKey('CursoPage', on_delete=models.CASCADE, related_name='form_fields')
+
+    field_type = models.CharField(
+        verbose_name='field type',
+        max_length=16,
+        choices=list(AbstractFormField.field_type.field.choices) + [('file', 'File')]
+    )
+
+class CursoPage(AbstractEmailForm):
     # --- Datos de Cabecera (Izquierda) ---
     imagen_afiche = models.ForeignKey(
         'wagtailimages.Image', on_delete=models.SET_NULL, null=True, related_name='+'
     )
     descripcion_corta = models.TextField(blank=True, help_text="Se muestra en la card del índice")
+
+    base_form_class = WagtailAdminFormPageForm
 
     # --- Datos de Cabecera (Derecha - Info Rápida con Íconos) ---
     categorias = ParentalManyToManyField('facultad.CategoriaCurso', blank=True)
@@ -73,7 +86,8 @@ class CursoPage(Page):
     matricula = models.CharField(max_length=255, blank=True)
 
     # Organización de los paneles en el Admin (para que no sea una lista eterna)
-    content_panels = Page.content_panels + [
+    content_panels = [
+        FieldPanel('title'), # Siempre es bueno tener el título a mano
         MultiFieldPanel([
             FieldPanel('imagen_afiche'),
             FieldPanel('descripcion_corta'),
@@ -106,6 +120,36 @@ class CursoPage(Page):
         ], heading="Sidebar de Datos Técnicos"),
     ]
 
+    # 2. Paneles del Formulario (Lo que se verá en la pestaña 'Formulario')
+    form_panels = [
+        FormSubmissionsPanel(), # Esto agrega el botón de "Ver envíos"
+        InlinePanel('form_fields', label="Campos del Formulario"),
+        MultiFieldPanel([
+            FieldRowPanel([
+                FieldPanel('from_address', classname="col6"),
+                FieldPanel('to_address', classname="col6"),
+            ]),
+            FieldPanel('subject'),
+        ], "Configuración del Correo Electrónico"),
+    ]
+
+    # 3. Organización de las Pestañas (Tabbed Interface)
+    edit_handler = TabbedInterface([
+        ObjectList(content_panels, heading='Contenido'),
+        ObjectList(form_panels, heading='Formulario'), # Usamos nuestro nuevo form_panels
+        ObjectList(AbstractEmailForm.promote_panels, heading='Promoción'),
+        ObjectList(AbstractEmailForm.settings_panels, heading='Configuración'),
+    ])
+
+    def get_template(self, request):
+        return 'facultad/curso_page.html'
+
+    def process_form_submission(self, form):
+        submission = super().process_form_submission(form)
+        # El envío de email se dispara automáticamente gracias a super() 
+        # siempre y cuando hayas llenado los campos en la pestaña "Formulario"
+        return submission
+    
 # 3. Índice de Cursos (La que tiene el buscador y filtros)
 class CursoIndexPage(Page):
     intro = models.TextField(blank=True)
@@ -137,6 +181,86 @@ class CursoIndexPage(Page):
         context['cursos'] = cursos
         context['categorias'] = CategoriaCurso.objects.all()
         return context
+
+class EventosIndexPage(Page):
+    # Esta es la página de tu foto (image_d856ee.png)
+    subpage_types = ['facultad.CursoPage', 'facultad.EventosIndexPage', 'facultad.EventoPage']
+    
+    # Podés agregar una imagen de cabecera si querés
+    banner_image = models.ForeignKey(
+        'wagtailimages.Image', on_delete=models.SET_NULL, null=True, blank=True, related_name='+'
+    )
+
+    content_panels = Page.content_panels + [
+        FieldPanel('banner_image'),
+    ]
+
+    def get_context(self, request):
+        context = super().get_context(request)
+        # Obtenemos las páginas hijas (Jornadas, Congresos, etc.)
+        context['eventos'] = self.get_children().live().specific()
+        return context
+
+    class Meta:
+        verbose_name = "Índice de Eventos Institucionales"
+
+class EventoFormField(AbstractFormField):
+    page = ParentalKey('EventoPage', on_delete=models.CASCADE, related_name='form_fields')
+
+class EventoPage(AbstractEmailForm):
+    # Campos específicos para Congresos/Jornadas
+    imagen_afiche = models.ForeignKey(
+        'wagtailimages.Image', on_delete=models.SET_NULL, null=True, related_name='+'
+    )
+    descripcion_corta = models.TextField(blank=True)
+    
+    # Datos de cabecera (simplificados)
+    fecha_evento = models.DateField(null=True, blank=True)
+    lugar = models.CharField(max_length=255, blank=True, help_text="Ej: Aula Magna")
+    
+    # Cuerpo de información
+    informacion_general = RichTextField(blank=True)
+    disertantes = RichTextField(blank=True) # Campo nuevo que no tienen los cursos
+    arancel = models.CharField(max_length=255, blank=True)
+
+    # Configuración de los paneles (solo lo que necesitás)
+    content_panels = [
+        FieldPanel('title'),
+        FieldPanel('imagen_afiche'),
+        FieldPanel('descripcion_corta'),
+        MultiFieldPanel([
+            FieldPanel('fecha_evento'),
+            FieldPanel('lugar'),
+            FieldPanel('arancel'),
+        ], heading="Datos del Evento"),
+        FieldPanel('informacion_general'),
+        FieldPanel('disertantes'),
+        InlinePanel('form_fields', label="Campos del Formulario de Inscripción"),
+    ]
+
+    # ... No te olvides de los form_panels que hicimos antes para el mail ...
+    form_panels = [
+        FormSubmissionsPanel(),
+        InlinePanel('form_fields', label="Campos del Formulario"),
+        MultiFieldPanel([
+            FieldRowPanel([
+                FieldPanel('from_address', classname="col6"),
+                FieldPanel('to_address', classname="col6"),
+            ]),
+            FieldPanel('subject'),
+        ], "Configuración del Correo Electrónico"),
+    ]
+
+    edit_handler = TabbedInterface([
+        ObjectList(content_panels, heading='Contenido'),
+        ObjectList(form_panels, heading='Formulario'),
+        ObjectList(AbstractEmailForm.promote_panels, heading='Promoción'),
+        ObjectList(AbstractEmailForm.settings_panels, heading='Configuración'),
+    ])
+
+    def get_template(self, request):
+        # Podés usar el mismo HTML de cursos o uno nuevo 'facultad/evento_page.html'
+        return 'facultad/curso_page.html'
 
 # --- 2. BLOQUES REUTILIZABLES (DEBEN IR ARRIBA DE LAS CLASES PAGE) ---
 
