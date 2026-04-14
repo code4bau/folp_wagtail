@@ -7,24 +7,33 @@
 
     <div class="row justify-content-center">
         {% for evento in eventos %}
-            <div class="col-md-5 mb-4">
-                <div class="card h-100 shadow-sm border-0 hover-zoom">
-                    <a href="{% pageurl evento %}" class="text-decoration-none">
-                        {% if evento.imagen_afiche %}
-                            {% image evento.imagen_afiche fill-800x450 as img %}
-                            <img src="{{ img.url }}" alt="{{ evento.title }}" class="card-img-top rounded">
+        <div class="col-md-5 mb-4">
+            <div class="card h-100 shadow-sm border-0 hover-zoom">
+                <a href="{% pageurl evento %}" class="text-decoration-none">
+                    {# Lógica simplificada y sin errores de variable #}
+                    {% with e=evento.specific %}
+                    <div class="card-img-container">
+                        {% if e.imagen_afiche %}
+                        {% image e.imagen_afiche fill-800x450 as img %}
+                        <img src="{{ img.url }}" alt="{{ e.title }}" class="card-img-top rounded">
+                        {% elif e.banner_image %}
+                        {% image e.banner_image fill-800x450 as img %}
+                        <img src="{{ img.url }}" alt="{{ e.title }}" class="card-img-top rounded">
                         {% else %}
-                            <div class="bg-secondary text-white d-flex align-items-center justify-content-center rounded" style="height: 250px;">
-                                <span>Sin imagen configurada</span>
-                            </div>
-                        {% endif %}
-                        
-                        <div class="card-body text-center">
-                            <h3 class="h5 text-dark fw-bold mt-2">{{ evento.title|upper }}</h3>
+                        <div class="bg-secondary text-white d-flex align-items-center justify-content-center rounded"
+                            style="height: 250px;">
+                            <span>Sin imagen configurada</span>
                         </div>
-                    </a>
-                </div>
+                        {% endif %}
+                    </div>
+                    {% endwith %}
+
+                    <div class="card-body text-center">
+                        <h3 class="h5 text-dark fw-bold mt-2">{{ evento.title|upper }}</h3>
+                    </div>
+                </a>
             </div>
+        </div>
         {% endfor %}
     </div>
 </main>
@@ -33,6 +42,7 @@
     .hover-zoom {
         transition: transform 0.3s ease;
     }
+
     .hover-zoom:hover {
         transform: scale(1.03);
     }

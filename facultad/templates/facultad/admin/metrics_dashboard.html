@@ -1,0 +1,38 @@
+{% extends "wagtailadmin/base.html" %}
+{% load i18n %}
+
+{% block titletag %}Métricas FOLP{% endblock %}
+
+{% block content %}
+    {% include "wagtailadmin/shared/header.html" with title="Métricas de la Facultad" icon="pick" %}
+
+    <div class="nice-padding">
+        <div class="grid">
+            <div class="c-token c-token--primary">
+                <h2>Resumen de Inscripciones</h2>
+                <table class="listing">
+                    <thead>
+                        <tr>
+                            <th>Título</th>
+                            <th>Tipo</th>
+                            <th>Inscriptos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in metricas %}
+                            <tr>
+                                <td>{{ item.title }}</td>
+                                <td>{{ item.tipo }}</td>
+                                <td><strong>{{ item.cantidad }}</strong></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="c-token" style="margin-top: 20px;">
+                <p><em>Nota: Las métricas de visualizaciones requieren integración con un contador de hits o Google Analytics.</em></p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

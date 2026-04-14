@@ -1,3 +1,5 @@
+from multiprocessing import context
+
 from django.db import models
 from wagtail.models import Page, Orderable
 from wagtail.fields import StreamField, RichTextField
@@ -183,13 +185,13 @@ class CursoIndexPage(Page):
         return context
 
 class EventosIndexPage(Page):
-    # Esta es la página de tu foto (image_d856ee.png)
-    subpage_types = ['facultad.CursoPage', 'facultad.EventosIndexPage', 'facultad.EventoPage']
-    
-    # Podés agregar una imagen de cabecera si querés
+    # Al heredar de Page (y no de AbstractEmailForm), 
+    # NO tiene campos de formulario ni los muestra.
     banner_image = models.ForeignKey(
         'wagtailimages.Image', on_delete=models.SET_NULL, null=True, blank=True, related_name='+'
     )
+
+    subpage_types = ['facultad.EventoPage', 'facultad.EventosIndexPage']
 
     content_panels = Page.content_panels + [
         FieldPanel('banner_image'),
@@ -197,7 +199,7 @@ class EventosIndexPage(Page):
 
     def get_context(self, request):
         context = super().get_context(request)
-        # Obtenemos las páginas hijas (Jornadas, Congresos, etc.)
+        # Esto es lo que hace que se vean las noticias/hijos
         context['eventos'] = self.get_children().live().specific()
         return context
 
@@ -208,6 +210,7 @@ class EventoFormField(AbstractFormField):
     page = ParentalKey('EventoPage', on_delete=models.CASCADE, related_name='form_fields')
 
 class EventoPage(AbstractEmailForm):
+    subpage_types = []
     # Campos específicos para Congresos/Jornadas
     imagen_afiche = models.ForeignKey(
         'wagtailimages.Image', on_delete=models.SET_NULL, null=True, related_name='+'
@@ -323,7 +326,7 @@ class NoticiaPage(Page):
     )
     resumen = models.CharField(max_length=250)
     cuerpo = RichTextField(blank=True)
-    prioridad = models.IntegerField(default=10)
+    prioridad = models.IntegerField(default=99)
     ancho = models.CharField(
         max_length=20, 
         choices=[('col-md-4', 'Chica'), ('col-md-8', 'Mediana'), ('col-12', 'Grande')], 
@@ -400,11 +403,13 @@ class FolpHomePage(Page):
     ]
 
     def get_context(self, request):
-        context = super().get_context(request)
-        noticias = list(NoticiaPage.objects.live().child_of(self))        
-        todo_el_contenido = sorted(noticias, key=lambda x: x.prioridad)
-        context['contenidos'] = todo_el_contenido
-        return context
+     context = super().get_context(request)
+     context['contenidos'] = NoticiaPage.objects.live()\
+        .child_of(self)\
+        .specific()\
+        .order_by('prioridad', '-fecha')
+    
+     return context
 
     class Meta:
         verbose_name = "Página de Inicio FOLP"
