@@ -1,38 +1,9 @@
-{% extends "wagtailadmin/base.html" %}
-{% load i18n %}
-
-{% block titletag %}Métricas FOLP{% endblock %}
-
+{% extends "base.html" %}
 {% block content %}
-    {% include "wagtailadmin/shared/header.html" with title="Métricas de la Facultad" icon="pick" %}
-
-    <div class="nice-padding">
-        <div class="grid">
-            <div class="c-token c-token--primary">
-                <h2>Resumen de Inscripciones</h2>
-                <table class="listing">
-                    <thead>
-                        <tr>
-                            <th>Título</th>
-                            <th>Tipo</th>
-                            <th>Inscriptos</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for item in metricas %}
-                            <tr>
-                                <td>{{ item.title }}</td>
-                                <td>{{ item.tipo }}</td>
-                                <td><strong>{{ item.cantidad }}</strong></td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="c-token" style="margin-top: 20px;">
-                <p><em>Nota: Las métricas de visualizaciones requieren integración con un contador de hits o Google Analytics.</em></p>
-            </div>
-        </div>
-    </div>
+<div style="background: yellow; padding: 50px; text-align: center; border: 5px solid black;">
+    <h1 style="color: blue;">¡TEST DE IDENTIDAD!</h1>
+    <h2 style="color: red; font-size: 5rem;">ID EN WEB: {{ page.id }}</h2>
+    <hr>
+    <p style="font-size: 2rem;">Revistas encontradas en el sistema: <strong>{{ revistas.count }}</strong></p>
+</div>
 {% endblock %}

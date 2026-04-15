@@ -39,16 +39,16 @@
     </div>
     {% endif %}
     {% endfor %}
-    <header class="header-unlp shadow-sm">
-        <div class="top-bar py-3" style="background-color: #1c705b;">
-            <div class="container d-flex align-items-center">
-                <a href="/" class="d-flex align-items-center text-decoration-none">
-                    <img src="../../media/images/logo folpunlp blanco.png" alt="UNLP" style="height: 50px;"
-                        class="me-3">
-                </a>
-            </div>
+    <header class="header-unlp shadow-sm banner-innovador">
+    <div class="banner-logos">
+        <img src="../../media/images/logo folpunlp blanco.png" alt="Logo FOLP" style="height: 60px;">
+        
+        <div class="text-center text-white">
+            <h2 class="mb-0 fw-bold" style="letter-spacing: 1px;">FACULTAD DE ODONTOLOGÍA</h2>
+            <p class="small mb-0">Universidad Nacional de La Plata</p>
         </div>
-
+    </div>
+ </header>
         <nav class="navbar navbar-expand-lg navbar-light bg-white py-0">
             <div class="container">
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -103,7 +103,7 @@
                             <ul class="dropdown-custom dropdown-menu shadow">
                                 <li><a href="{% slugurl 'investigacion' %}">Principal Investigacion</a></li>
                                 <li><a href="{% slugurl 'proyectos' %}">Proyectos</a></li>
-                                <li><a href="{% slugurl 'cientificas' %}">Revistas Cientificas</a></li>
+                                <li><a href="{% slugurl 'revcientificas' %}">Revistas Cientificas</a></li>
                                 <li><a href="{% slugurl 'creacion' %}">Resolucion del Centro y los Objetivos</a></li>
                                 <li><a href="{% slugurl 'iies' %}">IIES</a></li>
                             </ul>
@@ -174,7 +174,7 @@
                 </div>
             </div>
         </nav>
-    </header>
+
 
     <main>
         {% block content %}{% endblock %}
@@ -339,6 +339,59 @@
     .sticky-top {
         z-index: 1020 !important; 
     }
+ /* 1. El contenedor del banner */
+.banner-innovador {
+    position: relative;
+    overflow: hidden; /* Para que el brillo no se salga de los bordes */
+    background: linear-gradient(135deg, #004a2d 0%, #00633d 100%); /* El verde FOLP */
+    padding: 20px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; /* Clave para que el brillo no se escape */
+    overflow: hidden;   /* Clave para recortar el brillo */
+}
+
+/* 2. El efecto de brillo (la "luz" que pasa) */
+.banner-innovador::after {
+content: "";
+    position: absolute;
+    top: 0;
+    left: -150%; /* Empezamos bien lejos a la izquierda */
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(
+        to right, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.08) 50%, 
+        transparent 100%
+    );
+    transform: skewX(-25deg); /* Inclinación pro */
+    animation: luz-sutil 7s infinite;
+    pointer-events: none; /* Para que no interfiera con los clics en logos o links */
+}
+
+/* 3. La animación del movimiento */
+@keyframes brillo-shimmer {
+    0% { left: -60%; }
+    20% { left: 120%; } /* Pasa rápido del 0 al 20% del tiempo */
+    100% { left: 120%; } /* Se queda esperando el resto del tiempo para no cansar la vista */
+}
+@keyframes luz-sutil {
+    0% { left: -150%; }
+    15% { left: 150%; } /* El brillo pasa en el primer 15% del tiempo */
+    100% { left: 150%; } /* El resto del tiempo se queda oculto */
+}
+/* 4. Estilo para los logos */
+.banner-logos {
+    position: relative;
+    z-index: 2; /* Para que los logos estén por encima del brillo */
+    max-width: 1200px;
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 </style>
 
 </html>
