@@ -41,12 +41,13 @@
     {% endfor %}
     <header class="header-unlp shadow-sm banner-innovador">
     <div class="banner-logos">
-        <img src="../../media/images/logo folpunlp blanco.png" alt="Logo FOLP" style="height: 60px;">
+        <a href="/"><img src="../../media/images/logo-folp-solo.png" alt="Logo FOLP" class="logo-banner"></a>
         
-        <div class="text-center text-white">
-            <h2 class="mb-0 fw-bold" style="letter-spacing: 1px;">FACULTAD DE ODONTOLOGÍA</h2>
-            <p class="small mb-0">Universidad Nacional de La Plata</p>
+        <div class=" text-banner text-white">
+            <h2 class="titulo-facultad">FACULTAD DE ODONTOLOGÍA</h2>
+            <p class="subtitulo-facultad mb-0">Universidad Nacional de La Plata</p>
         </div>
+        <img src="../../media/images/logo-unlp-solo.png" alt="logo UNLP" class="logo-banner d-none d-lg-block">
     </div>
  </header>
         <nav class="navbar navbar-expand-lg navbar-light bg-white py-0">
@@ -339,58 +340,96 @@
     .sticky-top {
         z-index: 1020 !important; 
     }
- /* 1. El contenedor del banner */
+/* 1. Contenedor Principal (Más petiso) */
 .banner-innovador {
     position: relative;
-    overflow: hidden; /* Para que el brillo no se salga de los bordes */
-    background: linear-gradient(135deg, #004a2d 0%, #00633d 100%); /* El verde FOLP */
-    padding: 20px 0;
+    overflow: hidden;
+    background: linear-gradient(135deg, #1c705b 0%, #289b7e 100%);
+    padding: 8px 0; /* Bajamos el padding para que sea finito */
+    min-height: 80px; /* Altura controlada */
     display: flex;
-    justify-content: center;
     align-items: center;
-    position: relative; /* Clave para que el brillo no se escape */
-    overflow: hidden;   /* Clave para recortar el brillo */
+}
+:root {
+    /* AJUSTÁ ESTOS VALORES A TU GUSTO */
+    --logo-size-pc: 80px;    /* Tamaño de los logos en computadora */
+    --logo-size-movil: 50px; /* Tamaño de los logos en celular */
 }
 
-/* 2. El efecto de brillo (la "luz" que pasa) */
-.banner-innovador::after {
-content: "";
-    position: absolute;
-    top: 0;
-    left: -150%; /* Empezamos bien lejos a la izquierda */
-    width: 40%;
-    height: 100%;
-    background: linear-gradient(
-        to right, 
-        transparent 0%, 
-        rgba(255, 255, 255, 0.08) 50%, 
-        transparent 100%
-    );
-    transform: skewX(-25deg); /* Inclinación pro */
-    animation: luz-sutil 7s infinite;
-    pointer-events: none; /* Para que no interfiera con los clics en logos o links */
-}
-
-/* 3. La animación del movimiento */
-@keyframes brillo-shimmer {
-    0% { left: -60%; }
-    20% { left: 120%; } /* Pasa rápido del 0 al 20% del tiempo */
-    100% { left: 120%; } /* Se queda esperando el resto del tiempo para no cansar la vista */
-}
-@keyframes luz-sutil {
-    0% { left: -150%; }
-    15% { left: 150%; } /* El brillo pasa en el primer 15% del tiempo */
-    100% { left: 150%; } /* El resto del tiempo se queda oculto */
-}
-/* 4. Estilo para los logos */
+/* 2. Estructura de Logos */
 .banner-logos {
     position: relative;
-    z-index: 2; /* Para que los logos estén por encima del brillo */
-    max-width: 1200px;
-    width: 90%;
+    z-index: 2;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column; /* Apilado en móvil */
     align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+}
+/* LOGOS EN MÓVIL: Controlamos que no exploten */
+.logo-banner {
+    height: var(--logo-size-movil) !important; /* Altura en móvil */
+    width: auto;
+    object-fit: contain;
+    transition: height 0.3s ease; /* Para que el cambio sea suave al redimensionar */
+}
+
+.titulo-facultad {
+    font-size: 1.1rem;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.subtitulo-facultad {
+    font-size: 0.75rem;
+}
+
+@media (min-width: 992px) {
+    .banner-logos {
+        flex-direction: row; /* Horizontal */
+        justify-content: space-between;
+        padding: 0 60px; /* Aire a los costados */
+    }
+
+    .logo-banner {
+        height: var(--logo-size-pc) !important; /* El tamaño que te gustó en PC */
+        flex: 0 0 auto;
+    }
+
+    .text-banner {
+        flex: 1;
+        text-align: center;
+    }
+
+    .titulo-facultad {
+        font-size: 1.8rem; /* Tamaño equilibrado para PC */
+    }
+
+    .subtitulo-facultad {
+        font-size: 0.95rem;
+    }
+}
+
+/* 4. El Brillo (Sin cambios, es lo que le da el toque) */
+.banner-innovador::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 30%;
+    height: 100%;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transform: skewX(-25deg);
+    animation: luz-sutil 7s infinite;
+}
+
+@keyframes luz-sutil {
+    0% { left: -150%; }
+    15% { left: 150%; }
+    100% { left: 150%; }
 }
 </style>
 
