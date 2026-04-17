@@ -117,8 +117,82 @@
                         {% endif %}
                     </div>
                 </div>
+                <div class="curso-detalles card shadow-sm p-4">
 
-                <!--    <aside class="col-lg-4">
+                    <div class="mb-3">
+                        {% if page.es_arancelado %}
+                        <span class="badge bg-warning text-dark">Arancelado</span>
+                        <p class="h4 mt-2 text-success">{{ page.precio }}</p>
+                        {% else %}
+                        <span class="badge bg-success">Sin Arancel / Gratuito</span>
+                        {% endif %}
+                    </div>
+
+                    <hr>
+
+                    <div class="curso-seccion mb-5">
+                        <h3 class="fw-bold mb-3" style="color: #005941;">Programa del Curso</h3>
+
+                        {% if page.programa_texto %}
+                        <div class="programa-contenido bg-light p-4 rounded-4 border mb-3">
+                            {{ page.programa_texto|richtext }}
+                        </div>
+                        {% endif %}
+
+                        {% if page.programa_pdf %}
+                        <div class="mt-3">
+                            <a href="{{ page.programa_pdf.url }}"
+                                class="btn btn-outline-danger d-inline-flex align-items-center gap-2">
+                                <i class="fas fa-file-pdf"></i>
+                                {% if page.programa_texto %}
+                                Descargar Programa en PDF
+                                {% else %}
+                                Ver Programa Completo (PDF)
+                                {% endif %}
+                            </a>
+                        </div>
+                        {% endif %}
+
+                        {% if not page.programa_texto and not page.programa_pdf %}
+                        <p class="text-muted italic">El programa se encuentra en proceso de actualización.</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="accordion" id="accordionCurso">
+                        {% if page.evaluacion %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseEval">
+                                    Formas de Evaluación
+                                </button>
+                            </h2>
+                            <div id="collapseEval" class="accordion-collapse collapse" data-bs-parent="#accordionCurso">
+                                <div class="accordion-body">
+                                    {{ page.evaluacion|richtext }}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if page.bibliografia %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseBiblio">
+                                    Bibliografía
+                        </div>
+                        </h2>
+                        <div id="collapseBiblio" class="accordion-collapse collapse" data-bs-parent="#accordionCurso">
+                            <div class="accordion-body">
+                                {{ page.bibliografia|richtext }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <!--    <aside class="col-lg-4">
                     <div class="bg-light p-4 rounded-4 border shadow-sm sidebar-datos">
 
                         {# Modalidad Resumen #}
@@ -165,17 +239,18 @@
                         </p>
                     </div>
                 </aside> -->
-            </div>
         </div>
+    </div>
     </div>
     <section class="mt-5 pt-5 border-top">
         <div class="row justify-content-center">
             <div class="col-lg-10">
-                <h2 class="fw-bold mb-4" style="color: #005941;">Preinscripción al curso</h2>
+                <h2 class="fw-bold mb-4" style="color: #005941;">Inscripción al curso</h2>
                 <p class="text-secondary mb-5">
                     Completá el siguiente formulario para reservar tu lugar. Te responderemos a la brevedad.
                 </p>
 
+                {% if page.es_arancelado %}
                 <div class="stepper-wrapper mb-5">
                     <div class="stepper-item active" id="step-1-indicator">
                         <div class="step-counter">1</div>
@@ -186,6 +261,7 @@
                         <div class="step-name">Comprobante de Pago</div>
                     </div>
                 </div>
+                {% endif %}
 
                 {% if form.errors %}
                 <div class="alert alert-danger">
@@ -202,15 +278,15 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold">Nombre *</label>
-                                <input type="text" name="nombres" class="form-control py-2">
+                                <input type="text" name="nombres" class="form-control py-2" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold">Apellido *</label>
-                                <input type="text" name="apellidos" class="form-control py-2">
+                                <input type="text" name="apellidos" class="form-control py-2" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold">DNI *</label>
-                                <input type="text" name="dni" id="id_dni" class="form-control py-2">
+                                <input type="text" name="dni" id="id_dni" class="form-control py-2" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold">Teléfono *</label>
@@ -221,12 +297,20 @@
                                 <input type="email" name="email" class="form-control py-2" required>
                             </div>
                         </div>
+
                         <div class="mt-4 text-end">
+                            {% if page.es_arancelado %}
                             <button type="button" class="btn btn-folp-blue px-4 fw-bold"
                                 onclick="nextStep(2)">SIGUIENTE</button>
+                            {% else %}
+                            <button type="submit" class="btn btn-success px-5 text-white fw-bold shadow">
+                                TERMINAR INSCRIPCIÓN <i class="fas fa-check-circle ms-2"></i>
+                            </button>
+                            {% endif %}
                         </div>
                     </div>
 
+                    {% if page.es_arancelado %}
                     <div id="step-2" style="display: none;">
                         <div class="alert alert-info border-0 rounded-3 mb-4 py-3">
                             <i class="fas fa-info-circle me-2" style="color: #005941;"></i>
@@ -250,6 +334,7 @@
                             </button>
                         </div>
                     </div>
+                    {% endif %}
                 </form>
             </div>
         </div>

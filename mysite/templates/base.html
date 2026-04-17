@@ -40,141 +40,147 @@
     {% endif %}
     {% endfor %}
     <header class="header-unlp shadow-sm banner-innovador">
-    <div class="banner-logos">
-        <a href="/"><img src="../../media/images/logo-folp-solo.png" alt="Logo FOLP" class="logo-banner"></a>
-        
-        <div class=" text-banner text-white">
-            <h2 class="titulo-facultad">FACULTAD DE ODONTOLOGÍA</h2>
-            <p class="subtitulo-facultad mb-0">Universidad Nacional de La Plata</p>
+
+        <div class="background-animado-wrapper">
+            <img src="../../media/images/bannerMovible.jpg" alt="Fondo Animado" class="background-animado-img">
         </div>
-        <img src="../../media/images/logo-unlp-solo.png" alt="logo UNLP" class="logo-banner d-none d-lg-block">
-    </div>
- </header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-white py-0">
-            <div class="container">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav w-100 justify-content-between">
-                        <li class="nav-item"><a class="nav-link" href="/">Inicio</a></li>
 
-                        <li class="nav-item dropdown-hover">
-                            <a class="nav-link dropdown-toggle" href="#" role="button"
-                                data-bs-toggle="dropdown">Institucional</a>
-                            <ul class="dropdown-custom dropdown-menu shadow">
-                                <li><a href="{% slugurl 'institucional' %}">Principal Institucional</a></li>
-                                <li><a href="{% slugurl 'autoridadess' %}">Autoridades</a></li>
-                                <li><a href="{% slugurl 'historia' %}">Historia</a></li>
-                                <li><a href="{% slugurl 'hospital' %}">Hospital Universitario</a></li>
-                                <li><a href="{% slugurl 'eveninstitucionales' %}">Eventos Institucionales</a></li>
-                                <li><a href="{% slugurl 'museo' %}">Museo</a></li>
-                                <li><a href="{% slugurl 'identidad' %}">Identidad Visual</a></li>
-                            </ul>
-                        </li>
+        <div class="banner-logos container-fluid px-lg-5">
+           <a href="/"><img src="../../media/images/logo-folp-solo.png" alt="Logo FOLP" class="logo-banner"></a> 
 
-                        <li class="nav-item dropdown-hover">
-                            <a class="nav-link dropdown-toggle" href="#" role="button"
-                                data-bs-toggle="dropdown">Estudiantiles</a>
-                            <ul class="dropdown-custom dropdown-menu shadow">
-                                <li><a href="{% slugurl 'estudiantiles' %}">Principal Estudiantiles</a></li>
-                                <li><a href="{% slugurl 'notiest' %}">Noticias</a></li>
-                                <li><a href="{% slugurl 'asignaturas' %}">Informacion de Asignaturas</a></li>
-                                <li><a href="{% slugurl 'becas' %}">Becas</a></li>
-                                <li><a href="{% slugurl 'hclinica' %}">Historia Clinica y Material de Descarga</a></li>
-                            </ul>
-                        </li>
-
-                        <li class="nav-item dropdown-hover">
-                            <a class="nav-link dropdown-toggle" href="#" role="button"
-                                data-bs-toggle="dropdown">Academica</a>
-                            <ul class="dropdown-custom dropdown-menu shadow">
-                                <li><a href="{% slugurl 'academica' %}">Principal Academica</a></li>
-                                <li><a href="{% slugurl 'carrera' %}">Carrera Odontologia</a></li>
-                                <li><a href="{% slugurl 'alumnos' %}">Alumnos</a></li>
-                                <li><a href="{% slugurl 'biblioteca' %}">Biblioteca</a></li>
-                                <li><a href="{% slugurl 'homologacion' %}">Homologacion</a></li>
-                                <li><a href="{% slugurl 'tecuniversitarias' %}">Tecnicaturas Universitarias</a></li>
-                            </ul>
-                        </li>
-
-                        <li class="nav-item dropdown-hover">
-                            <a class="nav-link dropdown-toggle" href="#" role="button"
-                                data-bs-toggle="dropdown">Investigacion</a>
-                            <ul class="dropdown-custom dropdown-menu shadow">
-                                <li><a href="{% slugurl 'investigacion' %}">Principal Investigacion</a></li>
-                                <li><a href="{% slugurl 'proyectos' %}">Proyectos</a></li>
-                                <li><a href="{% slugurl 'revcientificas' %}">Revistas Cientificas</a></li>
-                                <li><a href="{% slugurl 'creacion' %}">Resolucion del Centro y los Objetivos</a></li>
-                                <li><a href="{% slugurl 'iies' %}">IIES</a></li>
-                            </ul>
-                        </li>
-
-                        <li class="nav-item dropdown-hover">
-                            <a class="nav-link dropdown-toggle" href="#" role="button"
-                                data-bs-toggle="dropdown">Posgrado</a>
-                            <ul class="dropdown-custom dropdown-menu shadow">
-                                <li><a href="{% slugurl 'posgrado' %}">Principal Posgrado</a></li>
-                                <li><a href="{% slugurl 'doctorado' %}">Doctorado</a></li>
-                                <li><a href="{% slugurl 'maestrias' %}">Maestrias</a></li>
-                                <li><a href="{% slugurl 'especializaciones' %}">Especializaciones</a></li>
-                                <li><a href="{% slugurl 'cursosposgrado' %}">Cursos</a></li>
-                                <li><a href="{% slugurl 'titposgrado' %}">Tramite de Titulo</a></li>
-                            </ul>
-                        </li>
-
-                        <li class="nav-item dropdown-hover">
-                            <a class="nav-link dropdown-toggle" href="#" role="button"
-                                data-bs-toggle="dropdown">Extension</a>
-                            <ul class="dropdown-custom dropdown-menu shadow">
-                                <li><a href="{% slugurl 'extension' %}">Principal Extension</a></li>
-                                <li><a href="{% slugurl 'programas' %}">Programas y Proyectos</a></li>
-                                <li><a href="{% slugurl 'politicas' %}">Politicas Sociales</a></li>
-                                <li><a href="{% slugurl 'voluntariado' %}">Voluntariado</a></li>
-                                <li><a href="{% slugurl 'entornos' %}">Revista Entornos</a></li>
-                                <li><a href="{% slugurl 'revista-el-lado-b-de-la-operatoria-dental-22262' %}">El Lado B de la Operatoria Dental</a></li>
-                            </ul>
-                        </li>
-
-                        <li class="nav-item dropdown-hover">
-                            <a class="nav-link dropdown-toggle" href="#" role="button"
-                                data-bs-toggle="dropdown">Prosecretaria de APS</a>
-                            <ul class="dropdown-custom dropdown-menu shadow">
-                                <li><a href="{% slugurl 'aps' %}">Principal APS</a></li>
-                                <li><a href="{% slugurl 'adei' %}">ADEI</a></li>
-                                <li><a href="{% slugurl 'expo' %}">Expo Universidad</a></li>
-                                <li><a href="{% slugurl 'jornadae' %}">Jornada de Extension</a></li>
-                                <li><a href="{% slugurl 'mes' %}">Mes de la Extension</a></li>
-                            </ul>
-                        </li>
-
-                        <li class="nav-item dropdown-hover">
-                            <a class="nav-link dropdown-toggle" href="#" role="button"
-                                data-bs-toggle="dropdown">Gestión</a>
-                            <ul class="dropdown-custom dropdown-menu shadow">
-                                <li><a href="{% slugurl 'gestion' %}">Principal Gestion</a></li>
-                                <li><a href="{% slugurl 'decanato' %}">Decanato</a></li>
-                                <li><a href="{% slugurl 'obrasp' %}">Obras y Planeamiento</a></li>
-                                <li><a href="{% slugurl 'coneau' %}">Acreditacion CONEAU</a></li>
-                                <li><a href="{% slugurl 'notigestion' %}">Noticias</a></li>
-                                <li><a href="{% slugurl 'seguridadh' %}">Seguridad e Higiene</a></li>
-                                <li><a href="{% slugurl 'pliego' %}">Pliego de Compras</a></li>
-                            </ul>
-                        </li>
-
-                        <li class="nav-item dropdown-hover">
-                            <a class="nav-link dropdown-toggle" href="#" role="button"
-                                data-bs-toggle="dropdown">Secretarias</a>
-                            <ul class="dropdown-custom dropdown-menu shadow">
-                                <li><a href="{% slugurl 'secretariact' %}">Secretaria de Ciencia y Técnica</a></li>
-                                <li><a href="{% slugurl 'secretariap' %}">Secretaria de Posgrado</a></li>
-                                <li><a href="{% slugurl 'secretariae' %}">Secretaria de Extension</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
+       <!--      <div class="text-banner text-white">
+                <h2 class="titulo-facultad">FACULTAD DE ODONTOLOGÍA</h2>
+                <p class="subtitulo-facultad mb-0">Universidad Nacional de La Plata</p>
             </div>
-        </nav>
+
+            <img src="../../media/images/logo-unlp-solo.png" alt="Logo UNLP" class="logo-banner d-none d-lg-block">
+        </div> -->
+    </header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white py-0">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav w-100 justify-content-between">
+                    <li class="nav-item"><a class="nav-link" href="/">Inicio</a></li>
+
+                    <li class="nav-item dropdown-hover">
+                        <a class="nav-link dropdown-toggle" href="#" role="button"
+                            data-bs-toggle="dropdown">Institucional</a>
+                        <ul class="dropdown-custom dropdown-menu shadow">
+                            <li><a href="{% slugurl 'institucional' %}">Principal Institucional</a></li>
+                            <li><a href="{% slugurl 'autoridadess' %}">Autoridades</a></li>
+                            <li><a href="{% slugurl 'historia' %}">Historia</a></li>
+                            <li><a href="{% slugurl 'hospital' %}">Hospital Universitario</a></li>
+                            <li><a href="{% slugurl 'eveninstitucionales' %}">Eventos Institucionales</a></li>
+                            <li><a href="{% slugurl 'museo' %}">Museo</a></li>
+                            <li><a href="{% slugurl 'identidad' %}">Identidad Visual</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown-hover">
+                        <a class="nav-link dropdown-toggle" href="#" role="button"
+                            data-bs-toggle="dropdown">Estudiantiles</a>
+                        <ul class="dropdown-custom dropdown-menu shadow">
+                            <li><a href="{% slugurl 'estudiantiles' %}">Principal Estudiantiles</a></li>
+                            <li><a href="{% slugurl 'notiest' %}">Noticias</a></li>
+                            <li><a href="{% slugurl 'asignaturas' %}">Informacion de Asignaturas</a></li>
+                            <li><a href="{% slugurl 'becas' %}">Becas</a></li>
+                            <li><a href="{% slugurl 'hclinica' %}">Historia Clinica y Material de Descarga</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown-hover">
+                        <a class="nav-link dropdown-toggle" href="#" role="button"
+                            data-bs-toggle="dropdown">Academica</a>
+                        <ul class="dropdown-custom dropdown-menu shadow">
+                            <li><a href="{% slugurl 'academica' %}">Principal Academica</a></li>
+                            <li><a href="{% slugurl 'carrera' %}">Carrera Odontologia</a></li>
+                            <li><a href="{% slugurl 'alumnos' %}">Alumnos</a></li>
+                            <li><a href="{% slugurl 'biblioteca' %}">Biblioteca</a></li>
+                            <li><a href="{% slugurl 'homologacion' %}">Homologacion</a></li>
+                            <li><a href="{% slugurl 'tecuniversitarias' %}">Tecnicaturas Universitarias</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown-hover">
+                        <a class="nav-link dropdown-toggle" href="#" role="button"
+                            data-bs-toggle="dropdown">Investigacion</a>
+                        <ul class="dropdown-custom dropdown-menu shadow">
+                            <li><a href="{% slugurl 'investigacion' %}">Principal Investigacion</a></li>
+                            <li><a href="{% slugurl 'proyectos' %}">Proyectos</a></li>
+                            <li><a href="{% slugurl 'revcientificas' %}">Revistas Cientificas</a></li>
+                            <li><a href="{% slugurl 'creacion' %}">Resolucion del Centro y los Objetivos</a></li>
+                            <li><a href="{% slugurl 'iies' %}">IIES</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown-hover">
+                        <a class="nav-link dropdown-toggle" href="#" role="button"
+                            data-bs-toggle="dropdown">Posgrado</a>
+                        <ul class="dropdown-custom dropdown-menu shadow">
+                            <li><a href="{% slugurl 'posgrado' %}">Principal Posgrado</a></li>
+                            <li><a href="{% slugurl 'doctorado' %}">Doctorado</a></li>
+                            <li><a href="{% slugurl 'maestrias' %}">Maestrias</a></li>
+                            <li><a href="{% slugurl 'especializaciones' %}">Especializaciones</a></li>
+                            <li><a href="{% slugurl 'cursosposgrado' %}">Cursos</a></li>
+                            <li><a href="{% slugurl 'titposgrado' %}">Tramite de Titulo</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown-hover">
+                        <a class="nav-link dropdown-toggle" href="#" role="button"
+                            data-bs-toggle="dropdown">Extension</a>
+                        <ul class="dropdown-custom dropdown-menu shadow">
+                            <li><a href="{% slugurl 'extension' %}">Principal Extension</a></li>
+                            <li><a href="{% slugurl 'programas' %}">Programas y Proyectos</a></li>
+                            <li><a href="{% slugurl 'politicas' %}">Politicas Sociales</a></li>
+                            <li><a href="{% slugurl 'voluntariado' %}">Voluntariado</a></li>
+                            <li><a href="{% slugurl 'entornos' %}">Revista Entornos</a></li>
+                            <li><a href="{% slugurl 'revista-el-lado-b-de-la-operatoria-dental-22262' %}">El Lado B de
+                                    la Operatoria Dental</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown-hover">
+                        <a class="nav-link dropdown-toggle" href="#" role="button"
+                            data-bs-toggle="dropdown">Prosecretaria de APS</a>
+                        <ul class="dropdown-custom dropdown-menu shadow">
+                            <li><a href="{% slugurl 'aps' %}">Principal APS</a></li>
+                            <li><a href="{% slugurl 'adei' %}">ADEI</a></li>
+                            <li><a href="{% slugurl 'expo' %}">Expo Universidad</a></li>
+                            <li><a href="{% slugurl 'jornadae' %}">Jornada de Extension</a></li>
+                            <li><a href="{% slugurl 'mes' %}">Mes de la Extension</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown-hover">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Gestión</a>
+                        <ul class="dropdown-custom dropdown-menu shadow">
+                            <li><a href="{% slugurl 'gestion' %}">Principal Gestion</a></li>
+                            <li><a href="{% slugurl 'decanato' %}">Decanato</a></li>
+                            <li><a href="{% slugurl 'obrasp' %}">Obras y Planeamiento</a></li>
+                            <li><a href="{% slugurl 'coneau' %}">Acreditacion CONEAU</a></li>
+                            <li><a href="{% slugurl 'notigestion' %}">Noticias</a></li>
+                            <li><a href="{% slugurl 'seguridadh' %}">Seguridad e Higiene</a></li>
+                            <li><a href="{% slugurl 'pliego' %}">Pliego de Compras</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown-hover">
+                        <a class="nav-link dropdown-toggle" href="#" role="button"
+                            data-bs-toggle="dropdown">Secretarias</a>
+                        <ul class="dropdown-custom dropdown-menu shadow">
+                            <li><a href="{% slugurl 'secretariact' %}">Secretaria de Ciencia y Técnica</a></li>
+                            <li><a href="{% slugurl 'secretariap' %}">Secretaria de Posgrado</a></li>
+                            <li><a href="{% slugurl 'secretariae' %}">Secretaria de Extension</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
 
     <main>
@@ -324,10 +330,12 @@
             opacity: 1;
         }
     }
+
     /* Forzamos que el header y sus menús siempre estén por encima de todo */
     .header-unlp {
         position: relative;
-        z-index: 1050 !important; /* Valor superior al de los elementos de la página */
+        z-index: 1050 !important;
+        /* Valor superior al de los elementos de la página */
     }
 
     /* Nos aseguramos de que el contenedor de filtros no tenga un z-index alto */
@@ -338,99 +346,158 @@
 
     /* Si el buscador o los filtros tienen 'sticky-top', bajamos su prioridad */
     .sticky-top {
-        z-index: 1020 !important; 
+        z-index: 1020 !important;
     }
-/* 1. Contenedor Principal (Más petiso) */
-.banner-innovador {
-    position: relative;
-    overflow: hidden;
-    background: linear-gradient(135deg, #1c705b 0%, #289b7e 100%);
-    padding: 8px 0; /* Bajamos el padding para que sea finito */
-    min-height: 80px; /* Altura controlada */
-    display: flex;
-    align-items: center;
-}
-:root {
-    /* AJUSTÁ ESTOS VALORES A TU GUSTO */
-    --logo-size-pc: 80px;    /* Tamaño de los logos en computadora */
-    --logo-size-movil: 50px; /* Tamaño de los logos en celular */
-}
 
-/* 2. Estructura de Logos */
-.banner-logos {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    flex-direction: column; /* Apilado en móvil */
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
+    /* 1. Contenedor Principal (Más petiso) */
+    .banner-innovador {
+        position: relative;
+        overflow: hidden;
+        background:  #1c705b; 
+        padding: 8px 0;
+        /* Bajamos el padding para que sea finito */
+        min-height: 80px;
+        /* Altura controlada */
+        display: flex;
+        align-items: center;
+    }
+    .background-animado-wrapper {
+    position: absolute;
+    top: 0;
+    right: 0; /* Anclado a la derecha */
+    width: 60%; /* Solo ocupa el lado derecho, donde aparece la imagen */
+    height: 100%;
+    z-index: 1; /* Detrás de logos (z-index: 2) */
+    
+    /* MÁSCARA: Negro (opaco) a la derecha, Transparente (invisible) a la izquierda */
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 100%);
+            mask-image: linear-gradient(to right, transparent 0%, black 100%);
+    
+    overflow: hidden; /* Recorta la imagen que se mueve adentro */
+}
+.background-animado-img {
+    height: 100%;
     width: 100%;
-    text-align: center;
-    padding: 10px 0;
+    object-fit: cover; /* Para que cubra el espacio sin estirarse */
+    position: absolute;
+    right: 0;
+    top: 0;
+    
+    /* ANIMACIÓN: Opacidad (transparencia) en lugar de movimiento */
+    animation: respiracion-fondo 8s ease-in-out infinite;
 }
-/* LOGOS EN MÓVIL: Controlamos que no exploten */
-.logo-banner {
-    height: var(--logo-size-movil) !important; /* Altura en móvil */
-    width: auto;
-    object-fit: contain;
-    transition: height 0.3s ease; /* Para que el cambio sea suave al redimensionar */
+@keyframes respiracion-fondo {
+    0% { opacity: 0; }     /* Invisible al inicio */
+    50% { opacity: 0.7; }  /* Aparece hasta un 40% (para que no sea muy invasivo) */
+    100% { opacity: 0; }   /* Vuelve a desaparecer */
+}
+@media (max-width: 992px) {
+    .background-animado-wrapper {
+        width: 100%; /* Cubre todo el alto en móvil */
+        -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
+                mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
+    }
 }
 
-.titulo-facultad {
-    font-size: 1.1rem;
-    margin: 0;
-    line-height: 1.2;
-}
+    :root {
+        /* AJUSTÁ ESTOS VALORES A TU GUSTO */
+        --logo-size-pc: 90px;
+        /* Tamaño de los logos en computadora */
+        --logo-size-movil: 50px;
+        /* Tamaño de los logos en celular */
+    }
 
-.subtitulo-facultad {
-    font-size: 0.75rem;
-}
-
-@media (min-width: 992px) {
+    /* 2. Estructura de Logos */
     .banner-logos {
-        flex-direction: row; /* Horizontal */
-        justify-content: space-between;
-        padding: 0 60px; /* Aire a los costados */
-    }
-
-    .logo-banner {
-        height: var(--logo-size-pc) !important; /* El tamaño que te gustó en PC */
-        flex: 0 0 auto;
-    }
-
-    .text-banner {
-        flex: 1;
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        /* Apilado en móvil */
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
         text-align: center;
+        padding: 10px 0;
+    }
+
+    /* LOGOS EN MÓVIL: Controlamos que no exploten */
+    .logo-banner {
+        height: var(--logo-size-movil) !important;
+        /* Altura en móvil */
+        width: auto;
+        object-fit: contain;
+        transition: height 0.3s ease;
+        /* Para que el cambio sea suave al redimensionar */
     }
 
     .titulo-facultad {
-        font-size: 1.8rem; /* Tamaño equilibrado para PC */
+        font-size: 1.1rem;
+        margin: 0;
+        line-height: 1.2;
     }
 
     .subtitulo-facultad {
-        font-size: 0.95rem;
+        font-size: 0.75rem;
     }
-}
 
-/* 4. El Brillo (Sin cambios, es lo que le da el toque) */
-.banner-innovador::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -150%;
-    width: 30%;
-    height: 100%;
-    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), transparent);
-    transform: skewX(-25deg);
-    animation: luz-sutil 7s infinite;
-}
+    @media (min-width: 992px) {
+        .banner-logos {
+            flex-direction: row;
+            /* Horizontal */
+            justify-content: space-between;
+            padding: 0 60px;
+            /* Aire a los costados */
+        }
 
-@keyframes luz-sutil {
-    0% { left: -150%; }
-    15% { left: 150%; }
-    100% { left: 150%; }
-}
+        .logo-banner {
+            height: var(--logo-size-pc) !important;
+            /* El tamaño que te gustó en PC */
+            flex: 0 0 auto;
+        }
+
+        .text-banner {
+            flex: 1;
+            text-align: center;
+        }
+
+        .titulo-facultad {
+            font-size: 1.8rem;
+            /* Tamaño equilibrado para PC */
+        }
+
+        .subtitulo-facultad {
+            font-size: 0.95rem;
+        }
+    }
+
+    /* 4. El Brillo (Sin cambios, es lo que le da el toque) */
+    .banner-innovador::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -150%;
+        width: 30%;
+        height: 100%;
+        background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), transparent);
+        transform: skewX(-25deg);
+        animation: luz-sutil 7s infinite;
+    }
+
+    @keyframes luz-sutil {
+        0% {
+            left: -150%;
+        }
+
+        15% {
+            left: 150%;
+        }
+
+        100% {
+            left: 150%;
+        }
+    }
 </style>
 
 </html>

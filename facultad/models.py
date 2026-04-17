@@ -87,6 +87,24 @@ class CursoPage(AbstractEmailForm):
     arancel_no_socios = models.CharField(max_length=255, blank=True)
     matricula = models.CharField(max_length=255, blank=True)
 
+
+    es_arancelado = models.BooleanField(default=True, help_text="Marcar si el curso tiene costo")
+    precio = models.CharField(max_length=100, blank=True, help_text="Ej: $5000 o Gratuito")
+
+    # Nuevas secciones
+    programa_pdf = models.ForeignKey(
+        'wagtaildocs.Document',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    # Agregamos el texto del programa
+    programa_texto = RichTextField(blank=True, verbose_name="Programa (Texto)")
+
+    evaluacion = RichTextField(blank=True, verbose_name="Formas de Evaluación")
+    bibliografia = RichTextField(blank=True, verbose_name="Bibliografía")
+
     # Organización de los paneles en el Admin (para que no sea una lista eterna)
     content_panels = [
         FieldPanel('title'), # Siempre es bueno tener el título a mano
@@ -120,6 +138,17 @@ class CursoPage(AbstractEmailForm):
             FieldPanel('arancel_no_socios'),
             FieldPanel('matricula'),
         ], heading="Sidebar de Datos Técnicos"),
+
+        MultiFieldPanel([
+            FieldPanel('es_arancelado'),
+            FieldPanel('precio'),
+        ], heading="Información de Costos"),
+        FieldPanel('evaluacion'),
+        FieldPanel('bibliografia'),
+        MultiFieldPanel([
+            FieldPanel('programa_pdf'),
+            FieldPanel('programa_texto'),
+        ], heading="Contenido del Programa"),
     ]
 
     # 2. Paneles del Formulario (Lo que se verá en la pestaña 'Formulario')

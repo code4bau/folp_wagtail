@@ -6,7 +6,7 @@
         <div class="carousel-item {% if forloop.first %}active{% endif %}" data-bs-interval="3000">
             {% image slide.imagen fill-1600x600 as img %}
             <div class="hero-banner"
-                style="background-image: url('{{ img.url }}'); height: 500px; background-size: cover; background-position: center; position: relative;">
+                style="background-image: url('{{ img.url }}'); height: 400px; background-size: cover; background-position: center; position: relative;">
 
                 <div
                     style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.2);">
@@ -47,3 +47,21 @@
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
     </button>
 </div>
+
+<style>
+    .hero-banner {
+    height: 350px; /* Tamaño para PC - Ajustá este número a tu gusto */
+    transition: height 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .hero-banner {
+        height: 250px; /* Tamaño para celular, para que no quede un fideo */
+    }
+}
+
+/* Opcional: Si el texto (la card) queda muy grande para el nuevo alto, achicá el padding */
+.hero-glass-card {
+    padding: 1.5rem !important;
+}
+</style>

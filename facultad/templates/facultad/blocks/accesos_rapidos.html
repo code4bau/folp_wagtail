@@ -5,7 +5,7 @@
         <div class="logo-item">
             <a href="{{ item.url }}" class="text-decoration-none">
                 <div class="logo-box-transparent">
-                    {% image item.imagen_logo max-80x80 as logo_img %}
+                    {% image item.imagen_logo max-150x150 as logo_img %}
                     <img src="{{ logo_img.url }}" alt="{{ item.etiqueta }}">
                 </div>
                 <span class="logo-label">{{ item.etiqueta }}</span>
@@ -18,18 +18,23 @@
 <style>
     /* El contenedor padre fuerza la fila */
     .logo-horizontal-row {
-        display: flex;             /* Forza la línea horizontal */
-        flex-wrap: nowrap;         /* Evita que se bajen si no entran */
-        justify-content: center;   /* Los centra en la pantalla */
+        display: flex;
+        /* Forza la línea horizontal */
+        flex-wrap: nowrap;
+        /* Evita que se bajen si no entran */
+        justify-content: center;
+        /* Los centra en la pantalla */
         align-items: flex-start;
-        gap: 30px;                 /* Espacio entre logos */
+        gap: 30px;
+        /* Espacio entre logos */
         padding: 20px;
-        overflow-x: auto;          /* Si son muchos, permite scroll lateral en celu */
+        overflow-x: auto;
+        /* Si son muchos, permite scroll lateral en celu */
     }
 
     .logo-item {
-        flex: 0 0 auto;            /* No permite que se achiquen */
-        width: 100px;
+        flex: 0 0 auto;
+        width: 90px;
         text-align: center;
     }
 
@@ -37,8 +42,10 @@
         background: transparent !important;
         border: none !important;
         box-shadow: none !important;
-        width: 50px;
-        height: 50px;
+
+        width: 40px;
+        height: 40px;
+
         margin: 0 auto 10px;
         display: flex;
         align-items: center;
@@ -50,17 +57,18 @@
         max-width: 100%;
         max-height: 100%;
         object-fit: contain;
+        border-radius: 10px; ;
         /* La sombra sutil que sigue la forma del logo */
-        filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); 
+        filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
     }
 
     /* Animación al pasar el mouse */
     .logo-item:hover {
         transform: translateY(-5px);
     }
-    
+
     .logo-item:hover img {
-        filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
+        filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.2));
     }
 
     .logo-label {
@@ -71,5 +79,18 @@
         color: #444;
         text-transform: uppercase;
         letter-spacing: 0.5px;
+    }
+
+    @media (max-width: 768px) {
+        .logo-box-transparent {
+            width: 50px;
+            height: 50px;
+        }
+
+        .logo-item {
+            width: 80px;
+            gap: 15px;
+            /* Achicamos el espacio en el celu */
+        }
     }
 </style>
