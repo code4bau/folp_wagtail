@@ -9,10 +9,10 @@
                 <div class="col-md-5">
                     {% if page.imagen_afiche %}
                     {# fill-600x800 para formato afiche vertical #}
-                    {% image page.imagen_afiche fill-600x800 as img %}
-                    <img src="{{ img.url }}" class="img-fluid rounded-3 shadow-sm" alt="{{ page.title }}">
+                    {% image page.imagen_afiche max-600x800 as img %}
+                    <img src="{{ img.url }}" class="img-fluid shadow-sm" alt="{{ page.title }}">
                     {% else %}
-                    <div class="p-5 text-center text-muted bg-light rounded-3">Sin imagen de afiche</div>
+                    <div class="p-5 text-center text-muted bg-light">Sin imagen de afiche</div>
                     {% endif %}
                 </div>
 

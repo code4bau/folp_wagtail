@@ -536,3 +536,4 @@ class NoticiasBlogPage(Page):
         todas = sorted(hijas + migradas, key=lambda x: x.fecha, reverse=True)
         context['entradas'] = todas
         return context
+
