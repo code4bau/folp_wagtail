@@ -3,7 +3,8 @@
     <div class="logo-horizontal-row">
         {% for item in self %}
         <div class="logo-item">
-            <a href="{{ item.url }}" class="text-decoration-none">
+            <a href="{{ item.url }}" class="text-decoration-none acceso-rapido-link"
+                data-etiqueta="{{ item.etiqueta }}">
                 <div class="logo-box-transparent">
                     {% image item.imagen_logo max-150x150 as logo_img %}
                     <img src="{{ logo_img.url }}" alt="{{ item.etiqueta }}">
@@ -57,7 +58,8 @@
         max-width: 100%;
         max-height: 100%;
         object-fit: contain;
-        border-radius: 10px; ;
+        border-radius: 10px;
+        ;
         /* La sombra sutil que sigue la forma del logo */
         filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
     }

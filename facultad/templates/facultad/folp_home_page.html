@@ -245,7 +245,8 @@
 
                 <div class="mt-4">
                     <a href="{% if noticia.link_externo %}{% pageurl noticia.link_externo %}{% else %}{% pageurl noticia %}{% endif %}"
-                        class="btn btn-lg rounded-pill px-5" style="background-color: #005941; color: white;">
+                        class="btn btn-lg rounded-pill px-5 noticia-link" data-titulo="{{ noticia.title }}"
+                        style="background-color: #005941; color: white;">
                         Ver Noticia Completa
                     </a>
                 </div>

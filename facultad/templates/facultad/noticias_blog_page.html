@@ -6,18 +6,19 @@
     <div class="row">
         <div class="col-md-8">
             <h1 class="fw-bold mb-4" style="color: #005941;">{{ page.title }}</h1>
-            
+
             <div class="d-flex flex-column gap-4">
                 {% for entrada in entradas %}
                 {# Convertimos la página genérica en una NoticiaPage real #}
                 {% with noticia=entrada.specific %}
-                <a href="{% pageurl noticia %}" class="text-decoration-none">
+                <a href="{% pageurl noticia %}" class="text-decoration-none noticia-link"
+                    data-titulo="{{ noticia.title }}">
                     <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100 p-3">
                         <div class="row g-0 align-items-center">
                             <div class="col-md-4">
                                 {% if noticia.imagen %}
-                                    {% image noticia.imagen fill-300x200 as img %}
-                                    <img src="{{ img.url }}" class="img-fluid rounded-3" alt="{{ noticia.title }}">
+                                {% image noticia.imagen fill-300x200 as img %}
+                                <img src="{{ img.url }}" class="img-fluid rounded-3" alt="{{ noticia.title }}">
                                 {% endif %}
                             </div>
                             <div class="col-md-8">

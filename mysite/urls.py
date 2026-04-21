@@ -1,11 +1,12 @@
 from django.conf import settings
 from django.urls import include, path
 from django.contrib import admin
-
+from wagtail.contrib.settings import urls as wagtailsettings_urls 
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
+from facultad.views import registrar_click_noticia
 from search import views as search_views
 
 urlpatterns = [
@@ -13,6 +14,9 @@ urlpatterns = [
     path("admin/", include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
     path("search/", search_views.search, name="search"),
+    path('settings/', include(wagtailsettings_urls)),
+    path('', include(wagtail_urls)),
+    path('registrar-click/<int:page_id>/', registrar_click_noticia, name='registrar_click'),
 ]
 
 

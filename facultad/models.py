@@ -537,3 +537,11 @@ class NoticiasBlogPage(Page):
         context['entradas'] = todas
         return context
 
+class NoticiaClick(models.Model):
+    # Relacionamos el clic con la página de la noticia
+    noticia = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='clicks_locales')
+    fecha_click = models.DateTimeField(auto_now_add=True)
+    ip_hash = models.CharField(max_length=64, blank=True) # Opcional: para no contar 100 clics de la misma persona
+
+    class Meta:
+        verbose_name = "Clic de Noticia"

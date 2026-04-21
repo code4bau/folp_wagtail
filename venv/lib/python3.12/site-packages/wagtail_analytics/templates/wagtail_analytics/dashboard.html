@@ -1,0 +1,73 @@
+{% extends "wagtailadmin/base.html" %}
+
+{% load i18n static wagtailadmin_tags %}
+
+{% block titletag %}{% trans "Analytics" %}{% endblock %}
+
+{% block extra_css %}
+    {{ site_switcher.media.css }}
+    <link rel="stylesheet" href="{% static 'chart.js/Chart.min.css' %}">
+    <link rel="stylesheet" href="{% static 'wagtailanalytics/main.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+    {% include "wagtailadmin/pages/_editor_js.html" %}
+    {{ site_switcher.media.js }}
+{% endblock %}
+
+{% block content %}
+    {% fragment as editing_actions %}
+        {% if site_switcher %}
+            <form method="get" id="settings-site-switch" novalidate>
+                <label for="{{ site_switcher.site.id_for_label }}">
+                    {% trans "Site" %}:
+                </label>
+                {{ site_switcher.site }}
+            </form>
+        {% endif %}
+    {% endfragment %}
+    {% include "wagtailadmin/shared/header.html" with title="Analytics" subtitle="Dashboard" extra_actions=editing_actions %}
+
+    <div class="nice-padding">
+      {% if is_enabled %}
+        <div class="col12 clearfix">
+            <h2>{% trans "Sessions" %}</h2>
+            <div id="sessions-container" class="chart"></div>
+        </div>
+        <div class="col6 clearfix">
+            <h2>{% trans "Top pages" %}</h2>
+            <table class="listing">
+              <thead>
+                <tr>
+                  <th scope="col">{% trans "Page" %}</th>
+                  <th scope="col">{% trans "Pageviews" %}</th>
+                </tr>
+                <tbody id="top-pages-container"></tbody>
+              </thead>
+            </table>
+        </div>
+        <div class="col6 clearfix">
+            <h2>{% trans "Top referrals" %}</h2>
+            <table class="listing">
+              <thead>
+                <tr>
+                  <th scope="col">{% trans "Source" %}</th>
+                  <th scope="col">{% trans "Pageviews" %}</th>
+                </tr>
+                <tbody id="top-referrers-container"></tbody>
+              </thead>
+            </table>
+        </div>
+      </div>
+      <script src="{% static 'chart.js/Chart.bundle.min.js' %}"></script>
+      <script src="{% static 'moment/moment.min.js' %}"></script>
+      <script src="{% static 'wagtailanalytics/main.js' %}"></script>
+      <script>
+          getReport('{{ report_url }}');
+      </script>
+    {% else %}
+    <h2 role="alert">
+      {% trans "Sorry, no analytics available for" %} <em>{{ site.hostname }}</em>
+    </h2>
+    {% endif %}
+{% endblock %}

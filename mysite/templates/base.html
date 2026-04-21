@@ -26,6 +26,7 @@
         rel="stylesheet">
     {% block extra_css %}{% endblock %}
 </head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
 
 <body class="{% block body_class %}{% endblock %}">
     {% wagtailuserbar %}
@@ -46,9 +47,9 @@
         </div>
 
         <div class="banner-logos container-fluid px-lg-5">
-           <a href="/"><img src="../../media/images/logo-folp-solo.png" alt="Logo FOLP" class="logo-banner"></a> 
+            <a href="/"><img src="../../media/images/logo-folp-solo.png" alt="Logo FOLP" class="logo-banner"></a>
 
-       <!--      <div class="text-banner text-white">
+            <!--      <div class="text-banner text-white">
                 <h2 class="titulo-facultad">FACULTAD DE ODONTOLOGÍA</h2>
                 <p class="subtitulo-facultad mb-0">Universidad Nacional de La Plata</p>
             </div>
@@ -66,7 +67,7 @@
                     <li class="nav-item"><a class="nav-link" href="/">Inicio</a></li>
 
                     <li class="nav-item dropdown-hover">
-                        <a class="nav-link dropdown-toggle" href="#" role="button"
+                        <a class="nav-link dropdown-toggle" style="cursor: pointer;" role="button"
                             data-bs-toggle="dropdown">Institucional</a>
                         <ul class="dropdown-custom dropdown-menu shadow">
                             <li><a href="{% slugurl 'institucional' %}">Principal Institucional</a></li>
@@ -229,7 +230,7 @@
 
             <hr class="mt-5 mb-4 opacity-25">
             <div class="text-center small opacity-50">
-                <p>&copy; 2026 Facultad de Odontología - UNLP | Desarrollado por la Prosecretaría de Informática</p>
+                <p>&copy; 2026 Facultad de Odontología - UNLP | Desarrollado por la Prosecretaría de Informática, Ciberseguridad y Tecnologia</p>
             </div>
         </div>
     </footer>
@@ -237,6 +238,12 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
+        document.querySelectorAll('.dropdown-toggle').forEach(element => {
+            element.addEventListener('click', function (e) {
+                // Esto frena cualquier acción que quiera hacer el link por defecto
+                e.preventDefault();
+            });
+        });
         // Esto fuerza al carrusel a arrancar con un intervalo de 5 segundos
         const myCarousel = document.querySelector('#carouselFolp')
         const carousel = new bootstrap.Carousel(myCarousel, {
@@ -267,8 +274,64 @@
     </script>
     <script type="text/javascript" src="{% static 'js/mysite.js' %}"></script>
     {% block extra_js %}{% endblock %}
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX'); // Reemplaza con tu ID real
+        gtag('config', 'G-XXXXXXXXXX', {
+            'cookie_flags': 'SameSite=None;Secure',
+            'debug_mode': true  // Esto es clave para ver los datos ya mismo
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Captura clics en noticias
+            document.querySelectorAll('.noticia-link').forEach(el => {
+                el.addEventListener('click', function () {
+                    gtag('event', 'click_noticia', {
+                        'titulo': this.getAttribute('data-titulo'),
+                        'metodo': 'web_principal'
+                    });
+                });
+            });
+
+            // Captura clics en accesos rápidos
+            document.querySelectorAll('.acceso-rapido-link').forEach(el => {
+                el.addEventListener('click', function () {
+                    gtag('event', 'click_acceso_rapido', {
+                        'nombre': this.getAttribute('data-etiqueta')
+                    });
+                });
+            });
+        });
+        document.querySelectorAll('.noticia-link').forEach(el => {
+            el.addEventListener('click', function (e) {
+                const pageId = this.getAttribute('data-page-id'); // Necesitás agregar este atributo en el HTML
+
+                // 1. Aviso a Google (Lo que ya tenías)
+                gtag('event', 'click_noticia', { 'titulo': this.getAttribute('data-titulo') });
+
+                // 2. Aviso a nuestra base de datos (Camino B)
+                fetch(`/registrar-click/${pageId}/`, {
+                    method: 'POST',
+                    headers: { 'X-CSRFToken': '{{ csrf_token }}' }
+                });
+            });
+        });
+    </script>
 </body>
 <style>
+    .dropdown-hover {
+        position: relative;
+    }
+
+    /* Forzamos que el link no tenga eventos de scroll */
+    .nav-link.dropdown-toggle:focus {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+
     /* Colores institucionales FOLP */
     .btn-dark-green {
         background-color: #005941 !important;
@@ -353,7 +416,7 @@
     .banner-innovador {
         position: relative;
         overflow: hidden;
-        background:  #1c705b; 
+        background: #1c705b;
         padding: 8px 0;
         /* Bajamos el padding para que sea finito */
         min-height: 80px;
@@ -361,43 +424,65 @@
         display: flex;
         align-items: center;
     }
+
     .background-animado-wrapper {
-    position: absolute;
-    top: 0;
-    right: 0; /* Anclado a la derecha */
-    width: 60%; /* Solo ocupa el lado derecho, donde aparece la imagen */
-    height: 100%;
-    z-index: 1; /* Detrás de logos (z-index: 2) */
-    
-    /* MÁSCARA: Negro (opaco) a la derecha, Transparente (invisible) a la izquierda */
-    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 100%);
-            mask-image: linear-gradient(to right, transparent 0%, black 100%);
-    
-    overflow: hidden; /* Recorta la imagen que se mueve adentro */
-}
-.background-animado-img {
-    height: 100%;
-    width: 100%;
-    object-fit: cover; /* Para que cubra el espacio sin estirarse */
-    position: absolute;
-    right: 0;
-    top: 0;
-    
-    /* ANIMACIÓN: Opacidad (transparencia) en lugar de movimiento */
-    animation: respiracion-fondo 8s ease-in-out infinite;
-}
-@keyframes respiracion-fondo {
-    0% { opacity: 0; }     /* Invisible al inicio */
-    50% { opacity: 0.7; }  /* Aparece hasta un 40% (para que no sea muy invasivo) */
-    100% { opacity: 0; }   /* Vuelve a desaparecer */
-}
-@media (max-width: 992px) {
-    .background-animado-wrapper {
-        width: 100%; /* Cubre todo el alto en móvil */
-        -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
-                mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
+        position: absolute;
+        top: 0;
+        right: 0;
+        /* Anclado a la derecha */
+        width: 60%;
+        /* Solo ocupa el lado derecho, donde aparece la imagen */
+        height: 100%;
+        z-index: 1;
+        /* Detrás de logos (z-index: 2) */
+
+        /* MÁSCARA: Negro (opaco) a la derecha, Transparente (invisible) a la izquierda */
+        -webkit-mask-image: linear-gradient(to right, transparent 0%, black 100%);
+        mask-image: linear-gradient(to right, transparent 0%, black 100%);
+
+        overflow: hidden;
+        /* Recorta la imagen que se mueve adentro */
     }
-}
+
+    .background-animado-img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+        /* Para que cubra el espacio sin estirarse */
+        position: absolute;
+        right: 0;
+        top: 0;
+
+        /* ANIMACIÓN: Opacidad (transparencia) en lugar de movimiento */
+        animation: respiracion-fondo 8s ease-in-out infinite;
+    }
+
+    @keyframes respiracion-fondo {
+        0% {
+            opacity: 0;
+        }
+
+        /* Invisible al inicio */
+        50% {
+            opacity: 0.7;
+        }
+
+        /* Aparece hasta un 40% (para que no sea muy invasivo) */
+        100% {
+            opacity: 0;
+        }
+
+        /* Vuelve a desaparecer */
+    }
+
+    @media (max-width: 992px) {
+        .background-animado-wrapper {
+            width: 100%;
+            /* Cubre todo el alto en móvil */
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
+            mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
+        }
+    }
 
     :root {
         /* AJUSTÁ ESTOS VALORES A TU GUSTO */
