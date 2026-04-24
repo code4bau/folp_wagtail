@@ -17,6 +17,46 @@ from wagtail.contrib.forms.forms import WagtailAdminFormPageForm
 from wagtail.contrib.forms.panels import FormSubmissionsPanel
 import json
 
+class CarreraLandingPage(Page):
+    """Pagina de caratula para la Carrera de Odontologia"""
+    
+    imagen_fondo = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=False,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    
+    # Boton 1: Vinculo a la pagina actual de Carrera
+    pagina_plan_estudios = models.ForeignKey(
+        'wagtailcore.Page',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    
+    # Boton 2: Boceto para uso futuro
+    titulo_boton_boceto = models.CharField(
+        max_length=50, 
+        default="Información General",
+        help_text="Nombre del segundo boton"
+    )
+    link_boton_boceto = models.URLField(
+        blank=True, 
+        help_text="Link provisional (boceto)"
+    )
+    content_panels = Page.content_panels + [
+        FieldPanel('imagen_fondo'),
+        PageChooserPanel('pagina_plan_estudios'),
+        FieldPanel('titulo_boton_boceto'),
+        FieldPanel('link_boton_boceto'),
+    ]
+
+    class Meta:
+        verbose_name = "Carátula de Carrera"
+
 # --- 1. SNIPPETS ---
 
 @register_snippet
